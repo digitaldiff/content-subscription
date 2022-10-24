@@ -3,3 +3,11 @@
 {% import '_includes/forms' as forms %}
 
 {% set title = 'Field Layouts' %}
+
+{% block content %}
+    {{ forms.fieldLayoutDesignerField({
+        label: 'Layout Designer',
+        name: 'fieldLayout',
+    }) }}
+
+{% endblock %}

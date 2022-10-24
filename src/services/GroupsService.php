@@ -56,19 +56,6 @@ class GroupsService extends Component
     {
         $newGroupRecord = new MailSubscriptions_MailGroupRecord;
 
-        $isNewTemplate = !$mailGroupModel->id;
-
-        // Make sure it's got a UUID
-        if ($isNewTemplate) {
-            if (empty($this->uid)) {
-                $mailGroupModel->uid = StringHelper::UUID();
-            }
-        } else if (!$mailGroupModel->uid) {
-            $mailGroupModel->uid = Db::uidById(MailSubscriptions_MailGroupRecord::tableName(), $mailGroupModel->id);
-        }
-
-        $newGroupRecord->id = $mailGroupModel->id;
-
         $newGroupRecord->sectionId = $mailGroupModel->sectionId;
         $newGroupRecord->groupName = $mailGroupModel->groupName;
         $newGroupRecord->emailSubject = $mailGroupModel->emailSubject;
@@ -76,9 +63,28 @@ class GroupsService extends Component
 
         $newGroupRecord->dateCreated = $mailGroupModel->dateCreated ?? new \DateTime('now');
         $newGroupRecord->dateUpdated = $mailGroupModel->dateUpdated ?? new \DateTime('now');
-        $newGroupRecord->uid = $mailGroupModel->uid;
+        $newGroupRecord->uid = StringHelper::UUID();
 
         $newGroupRecord->save();
+
+        return true;
+    }
+
+    /**
+     * @param MailGroupModel $mailGroupModel
+     * @return bool
+     * @throws \Exception
+     */
+    public function updateMailGroup(MailGroupModel $mailGroupModel): bool
+    {
+        $groupRecord = MailSubscriptions_MailGroupRecord::find()->where(['id' => $mailGroupModel->id])->one();
+
+        $groupRecord->sectionId = $mailGroupModel->sectionId;
+        $groupRecord->groupName = $mailGroupModel->groupName;
+        $groupRecord->emailSubject = $mailGroupModel->emailSubject;
+        $groupRecord->emailBody = $mailGroupModel->emailBody;
+
+        $groupRecord->update();
 
         return true;
     }
@@ -102,8 +108,6 @@ class GroupsService extends Component
         $groupModel->groupName = $record->groupName;
         $groupModel->emailSubject = $record->emailSubject;
         $groupModel->emailBody = $record->emailBody;
-        /*$groupModel->dateCreated = $record->dateCreated;
-        $groupModel->dateUpdated = $record->dateUpdated;*/
 
         return $groupModel;
     }

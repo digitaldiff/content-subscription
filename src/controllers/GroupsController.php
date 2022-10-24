@@ -17,22 +17,49 @@ class GroupsController extends Controller
         $request = \Craft::$app->getRequest();
 
         $emailSubject = $request->getRequiredParam('emailSubject');
-        $emailBody = $request->getRequiredParam('emailBody');
+        $emailBody = $request->getRequiredParam('emailMessage');
+        $groupName = $request->getRequiredParam('groupName');
+        $sectionId = $request->getRequiredParam('section');
 
         //TODO set values
-        $groupName = '';
-        $emailSubject = '';
 
         $subscriptionsService = Plugin::getInstance()->groupsService;
 
         $groupModel = new MailGroupModel;
-        $groupModel->id = 0;
-        $groupModel->sectionId = 1;
+        $groupModel->sectionId = $sectionId;
         $groupModel->groupName = $groupName;
         $groupModel->emailSubject = $emailSubject;
         $groupModel->emailBody = $emailBody;
 
         $subscriptionsService->saveMailGroup($groupModel);
+
+        return $this->redirect('mail-subscriptions/groups');
+    }
+
+    public function actionUpdateMailGroup()
+    {
+        $request = \Craft::$app->getRequest();
+
+        $emailSubject = $request->getRequiredParam('emailSubject');
+        $emailBody = $request->getRequiredParam('emailMessage');
+        $groupName = $request->getRequiredParam('groupName');
+        $sectionId = $request->getRequiredParam('section');
+        $groupId = $request->getRequiredParam('id');
+
+        //TODO set values
+
+        $subscriptionsService = Plugin::getInstance()->groupsService;
+
+        $groupModel = new MailGroupModel;
+        $groupModel->id = $groupId;
+        $groupModel->sectionId = $sectionId;
+        $groupModel->groupName = $groupName;
+        $groupModel->emailSubject = $emailSubject;
+        $groupModel->emailBody = $emailBody;
+
+        $subscriptionsService->updateMailGroup($groupModel);
+
+        return $this->redirect('mail-subscriptions/groups');
     }
 
     public function actionCreateMailGroup(): Response

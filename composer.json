@@ -1,5 +1,5 @@
 {
-  "name": "3wpb/craft-mail-subscriptions",
+  "name": "3wpb/craft-content-subscriptions",
   "description": "Send automatic email notifications whenever you publish new content.",
   "minimum-stability": "stable",
   "license": "MIT",

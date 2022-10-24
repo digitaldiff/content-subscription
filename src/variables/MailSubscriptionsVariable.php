@@ -10,13 +10,23 @@ class MailSubscriptionsVariable
         return Plugin::getInstance()->groupsService->getMailGroups($id);
     }
 
-    public function getSubscriptions($id = 0): array
+    public function getSubscriptions(): array
     {
-        return Plugin::getInstance()->subscriptionsService->getSubscriptions($id);
+        return Plugin::getInstance()->subscriptionsService->getSubscriptions();
     }
 
     public function removeGroup($id): bool
     {
         return Plugin::getInstance()->groupsService->removeGroup($id);
+    }
+
+    public function getSections(): array
+    {
+        $sections = \Craft::$app->getSections()->getAllSections();
+        $result = [];
+        foreach ($sections as $section) {
+             $result[$section->id] = $section->name;
+        }
+        return $result;
     }
 }

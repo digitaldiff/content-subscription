@@ -1,45 +1,25 @@
-{% extends '_layouts/cp' %}
-
 {% import '_includes/forms' as forms %}
-
-{% set title = 'Edit Mail Group' %}
-
-{% set fullPageForm = true %}
 
 {#{% set formActions = [
     {
         label: 'Save and continue editing'|t('mail-subscriptions'),
+        redirect: 'mail-subscriptions/groups/edit/{group.id}',
         retainScroll: true,
         shortcut: true,
-        action: 'mail-subscriptions/groups/edit/{group.id}'
     },
     {
         label: 'Save and add another'|t('mail-subscriptions'),
-        action: '/mail-subscriptions/groups/new',
+        redirect: 'mail-subscriptions/groups/new',
         shortcut: true,
         shift: true,
     },
     {
         label: 'Delete'|t('mail-subscriptions'),
         confirm: 'Are you sure you want to delete this?'|t('plugin-handle'),
-        action: 'mail-subscriptions/groups',
+        redirect: 'mail-subscriptions/groups',
         destructive: true,
     },
 ] %}#}
-
-{% set sections = craft.mailSubscriptions.getSections %}
-
-{% block content %}
-
-    {{ forms.hidden({
-        name: 'action',
-        value: 'mail-subscriptions/groups/update-mail-group'
-    }) }}
-
-    {{ forms.hidden({
-        name: 'id',
-        value: group.id
-    }) }}
 
     {{ forms.selectField({
         label: 'Section'|t('mail-subscriptions'),
@@ -66,11 +46,3 @@
         value: group.emailBody,
         rows: 8
     }) }}
-
-{% endblock %}
-
-{% block details %}
-    <div id="settings" class="meta">
-        {% include 'mail-subscriptions/_includes/_sidebar' %}
-    </div>
-{% endblock %}

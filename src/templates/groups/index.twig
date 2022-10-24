@@ -4,18 +4,8 @@
 
 {% set title = 'Mail Groups' %}
 
-
-{% if craft.app.request.getParam('del') and craft.app.request.getParam('del') > 0 %}
-    {% set delete = craft.mailSubscriptions.removeGroup(craft.app.request.getParam('del')) %}
-{% endif %}
-
 {% set mailGroups = craft.mailSubscriptions.getMailGroups() %}
-
-{#{% set settings = craft.app.plugins.getPlugin('mail-subscriptions').settings %}#}
-
-{# Blog = 1, Home = 3 #}
-
-{% set mailSubscriptions = craft.mailSubscriptions.getSubscriptions() %}
+{% set sections = craft.mailSubscriptions.getSections %}
 
 {% block headertitle %}
     <h1>{{ title }}</h1>
@@ -36,19 +26,17 @@
         <table>
             <tr>
                 <td>{{ 'Group ID' |t('mail-subscriptions') }}</td>
-                <td>{{ 'Section ID' |t('mail-subscriptions') }}</td>
+                <td>{{ 'Section' |t('mail-subscriptions') }}</td>
                 <td>{{ 'Group Name' |t('mail-subscriptions') }}</td>
                 <td class="actions"></td>
             </tr>
             {% for group in mailGroups %}
-                <tr>
+                <tr class="s-{{ group.sectionId }}">
                     <td>{{ group.id }}</td>
-                    <td>{{ group.sectionId }}</td>
+                    <td>{{ sections[group.sectionId] }}</td>
                     <td>{{ group.groupName }}</td>
                     <td>
-
                         <a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ 'Edit'|t('mail-subscriptions') }}</a>
-
                         {# {% if currentUser.can('formie-createForms') %}#}
                         <a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}">{{ 'Delete'|t('mail-subscriptions') }}</a>
 
@@ -59,56 +47,7 @@
         </table>
     {% endif %}
 
-    {#
-    {{ forms.selectField({
-        name: 'sectionSelect',
-        label: 'Section' |t('mail-subscriptions'),
-        value: '',
-        instructions: 'Select a topic.' |t('mail-subscriptions'),
-        options: {
-            question: 'Question',
-            feedback: 'Feedback'
-        },
-        required: true,
 
-    }) }}#}
-
-
-
-    {# {% for key, value in mailSubscriptions %}
-        <div id="{{ key }}" {{ loop.index > 1 ? 'class="hidden"' : '' }}>
-            <table>
-
-                <tr>
-                    <td>E-Mail</td>
-                </tr>
-
-
-                {% for subscription in value %}
-                    <tr>
-                        <td>
-                            {{ subscription.mail }}
-                            <form method="post" action="">
-                                {{ csrfInput() }}
-                                {{ csrfInput() }}
-
-                                {{ forms.hidden({
-                                    name: 'action',
-                                    value: 'mail-subscriptions/subscription/remove-subscription'
-                                }) }}
-                                {{ forms.hidden({
-                                    name: 'subscription-id',
-                                    value: subscription.id
-                                }) }}
-
-                                <a href="" onclick="removeSubscription()">Löschen</a>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    {% endfor %}#}
 
     {#{% set text = 'Enter a message. Available tags: ' ~ availableTags() %}#}
     {#
@@ -177,6 +116,4 @@
         }
     </script>
     #}
-
-    {% do view.registerJsFile('mai/some-file.js') %}
 {% endblock %}

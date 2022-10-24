@@ -26,7 +26,7 @@ class SubscriptionsService extends Component
      * If GroupId is not set, this method returns all subscriptions.
      * Otherwise, only the subscriptions with the corresponding GroupId are returned.
      */
-    public function getSubscriptions(int $groupId = 0): array
+    /*public function getSubscriptions(int $groupId = 0): array
     {
         $result = [];
         if ($groupId === 0) {
@@ -47,6 +47,30 @@ class SubscriptionsService extends Component
         }
 
         return $result;
+    }*/
+
+
+    /**
+     * @return array
+     */
+    public function getSubscriptions(): array
+    {
+        $result = [];
+        $subscriptions =  MailSubscriptions_SubscriptionRecord::find()->all();
+
+        foreach ($subscriptions as $subscription) {
+            $subscriptionModel = new SubscriptionModel();
+            $subscriptionModel->id = $subscription->id;
+            $subscriptionModel->groupId = $subscription->groupId;
+            $subscriptionModel->firstName = $subscription->firstName;
+            $subscriptionModel->lastName = $subscription->lastName;
+            $subscriptionModel->email = $subscription->email;
+
+            $result[] = $subscriptionModel;
+        }
+
+        return $result;
+
     }
 
     /**

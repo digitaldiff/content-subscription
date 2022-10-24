@@ -3,3 +3,47 @@
 {% import '_includes/forms' as forms %}
 
 {% set title = 'Subscriptions'|t('mail-subscriptions') %}
+{% set groups = craft.mailSubscriptions.getMailGroups %}
+
+{% block headertitle %}
+    <h1>{{ title }}</h1>
+{% endblock %}
+
+{% block actionButton %}
+    <a href="{{ cpUrl('mail-subscriptions/subscriptions/new') }}" class="btn submit add icon">{{ 'New Group'|t('mail-subscriptions') }}</a>
+{% endblock %}
+
+{% block content %}
+    {{ d(groups) }}
+    {% set subscriptions = craft.mailSubscriptions.getSubscriptions() %}
+    {{ d(subscriptions) }}
+    {% if subscriptions|length %}
+        <h3>{{ 'Subscriptions' | t('mail-subscriptions') }} </h3>
+        <table>
+            <tr class="">
+                <td>{{ 'Group ID' |t('mail-subscriptions') }}</td>
+                <td>{{ 'Firstname' |t('mail-subscriptions') }}</td>
+                <td>{{ 'Lastname' |t('mail-subscriptions') }}</td>
+                <td>{{ 'Email' |t('mail-subscriptions') }}</td>
+                <td class="actions"></td>
+            </tr>
+            {% for subscription in subscriptions %}
+                <tr class="g-{{ subscription.groupId }}">
+                    <td>{{ subscription.groupId }}</td>
+                    <td>{{ subscription.firstName }}</td>
+                    <td>{{ subscription.lastName }}</td>
+                    <td>{{ subscription.email }}</td>
+                    <td>
+                        <a href="{{ cpUrl('mail-subscriptions/subscriptions/edit/' ~ subscription.id) }}">{{ 'Edit'|t('mail-subscriptions') }}</a>
+
+                        {% if currentUser.can('formie-createForms') %}
+                        <a href="{{ cpUrl('mail-subscriptions/subscriptions/delete/' ~ subscription.id) }}">{{ 'Delete'|t('mail-subscriptions') }}</a>
+
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}
