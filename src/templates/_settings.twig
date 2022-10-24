@@ -1,0 +1,21 @@
+{% import '_includes/forms' as forms %}
+
+{{ forms.lightswitchField({
+    label: 'Plugin Enabled',
+    name: 'pluginEnabled',
+    on: settings.pluginEnabled,
+    first: true,
+}) }}
+
+{% for subscription in settings.subscriptions %}
+    {{ subscription }}
+{% endfor %}
+
+ {{ forms.textAreaField({
+     label: 'Mail Template',
+     name: 'mailTemplate',
+     value: settings.mailTemplate,
+     instructions: 'Enter a message. Available tags: ##NAME##, ##EMAIL##' ,
+     rows: 4,
+     required: true,
+ }) }}
