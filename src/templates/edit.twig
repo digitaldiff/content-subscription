@@ -6,7 +6,7 @@
 {% set mailGroups = craft.mailSubscriptions.getMailGroups(craft.app.request.getParam('id')) %}
     {% for group in mailGroups %}
         <tr>
-            <td>{{ group.id }}</td>
+            <td>{{ group.id }} a</td>
             <td>{{ group.sectionId }}</td>
             <td>{{ group.groupName }}</td>
             <td>
