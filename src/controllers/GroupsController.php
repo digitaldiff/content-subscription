@@ -89,10 +89,12 @@ class GroupsController extends Controller
             $success = Plugin::getInstance()->groupsService->removeGroup($id);
 
             if ($success) {
-                return $this->asSuccess('mail-subscriptions/groups');
+                \Craft::$app->getSession()->setSuccess(\Craft::t('mail-subscriptions', 'Group deleted'));
+                return $this->redirect('mail-subscriptions/groups/');
             }
         }
+        \Craft::$app->getSession()->setError(\Craft::t('mail-subscriptions', 'An error occured'));
 
-        return $this->asFailure('mail-subscriptions/groups');
+        return $this->redirect('mail-subscriptions/groups/');
     }
 }

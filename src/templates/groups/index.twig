@@ -22,29 +22,36 @@
 
 {% block content %}
     {% if mailGroups|length %}
-        <h3>{{ 'Groups' | t('mail-subscriptions') }} </h3>
-        <table>
-            <tr>
-                <td>{{ 'Group ID' |t('mail-subscriptions') }}</td>
-                <td>{{ 'Section' |t('mail-subscriptions') }}</td>
-                <td>{{ 'Group Name' |t('mail-subscriptions') }}</td>
-                <td class="actions"></td>
-            </tr>
-            {% for group in mailGroups %}
-                <tr class="s-{{ group.sectionId }}">
-                    <td>{{ group.id }}</td>
-                    <td>{{ sections[group.sectionId] }}</td>
-                    <td>{{ group.groupName }}</td>
-                    <td>
-                        <a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ 'Edit'|t('mail-subscriptions') }}</a>
-                        {# {% if currentUser.can('formie-createForms') %}#}
-                        <a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}">{{ 'Delete'|t('mail-subscriptions') }}</a>
-
-                        {#{% endif %}#}
-                    </td>
+        <div class="tableview tablepane">
+            <table class="data fullwidth">
+                <thead>
+                <tr>
+                    <th scope="col">{{ 'Group ID' |t('mail-subscriptions') }}</th>
+                    <th scope="col">{{ 'Group Name' |t('mail-subscriptions') }}</th>
+                    <th scope="col">{{ 'Section' |t('mail-subscriptions') }}</th>
+                    <th class="thin"></th>
+                    <th class="thin"></th>
                 </tr>
-            {% endfor %}
-        </table>
+                </thead>
+                {% for group in mailGroups %}
+                    <tbody>
+                    <tr class="s-{{ group.sectionId }}">
+                        <td>{{ group.id }}</td>
+                        <td>{{ group.groupName }}</td>
+                        <td>{{ sections[group.sectionId] }}</td>
+                        {# <td>
+                                <a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ 'Edit'|t('mail-subscriptions') }}</a>
+                                {% if currentUser.can('formie-createForms') %}
+                                    <a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}">{{ 'Delete'|t('mail-subscriptions') }}</a>
+                                {% endif %}
+                            </td>#}
+                        <td><a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
+                        <td><a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+                    </tr>
+                    </tbody>
+                {% endfor %}
+            </table>
+        </div>
     {% endif %}
 
 

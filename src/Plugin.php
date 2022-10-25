@@ -24,7 +24,7 @@ use craft\events\ModelEvent;
  */
 class Plugin extends \craft\base\Plugin
 {
-/*    public bool $hasCpSection = true;*/
+    public bool $hasCpSection = true;
     public bool $hasCpSettings = true;
 
     public function init(): void
@@ -38,7 +38,7 @@ class Plugin extends \craft\base\Plugin
         $this->_registerTwigExtensions();
     }
 
-    private function setup(): void
+    protected function setup(): void
     {
         /** @var SettingsModel $settings */
         $settings = $this->getSettings();
@@ -51,10 +51,10 @@ class Plugin extends \craft\base\Plugin
         ]);
     }
 
-    private function registerEvents(): void
+    protected function registerEvents(): void
     {
 
-        Event::on(
+  /*      Event::on(
             Cp::class,
             Cp::EVENT_REGISTER_CP_NAV_ITEMS,
             function(RegisterCpNavItemsEvent $event) {
@@ -68,7 +68,7 @@ class Plugin extends \craft\base\Plugin
                     ],
                 ];
             }
-        );
+        );*/
 
         Event::on(
             UrlManager::class,
@@ -131,7 +131,7 @@ class Plugin extends \craft\base\Plugin
         );
     }
 
-    private function _registerTwigExtensions() : void
+    protected function _registerTwigExtensions() : void
     {
         $extensions = [
             DataHelperExtension::class,
@@ -141,6 +141,32 @@ class Plugin extends \craft\base\Plugin
             Craft::$app->view->registerTwigExtension(new $extension);
         }
     }
+
+    public function getCpNavItem(): ?array
+    {
+        $nav = parent::getCpNavItem();
+
+        $nav['label'] = 'Mail Subscriptions';
+
+        $nav['subnav']['groups'] = [
+            'label' => Craft::t('mail-subscriptions', 'Mail groups'),
+            'url' => 'mail-subscriptions/groups',
+        ];
+
+        $nav['subnav']['subscriptions'] = [
+            'label' => Craft::t('mail-subscriptions', 'Subscriptions'),
+            'url' => 'mail-subscriptions/subscriptions',
+        ];
+
+        $nav['subnav']['field-layouts'] = [
+            'label' => Craft::t('mail-subscriptions', 'Field Layoutss'),
+            'url' => 'mail-subscriptions/field-layouts',
+        ];
+
+        return $nav;
+    }
+
+
 
     protected function createSettingsModel(): ?Model
     {

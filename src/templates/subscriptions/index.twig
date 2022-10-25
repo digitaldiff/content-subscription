@@ -1,3 +1,9 @@
+{% extends '_layouts/elementindex.twig' %}
+{% set title = 'Products' %}
+{% set elementType = 'publishing\\mailsubscriptions\\elements\\Subscription' %}
+
+
+{#
 {% extends '_layouts/cp' %}
 
 {% import '_includes/forms' as forms %}
@@ -14,36 +20,36 @@
 {% endblock %}
 
 {% block content %}
-    {{ d(groups) }}
+
     {% set subscriptions = craft.mailSubscriptions.getSubscriptions() %}
-    {{ d(subscriptions) }}
+
     {% if subscriptions|length %}
-        <h3>{{ 'Subscriptions' | t('mail-subscriptions') }} </h3>
-        <table>
-            <tr class="">
-                <td>{{ 'Group ID' |t('mail-subscriptions') }}</td>
-                <td>{{ 'Firstname' |t('mail-subscriptions') }}</td>
-                <td>{{ 'Lastname' |t('mail-subscriptions') }}</td>
-                <td>{{ 'Email' |t('mail-subscriptions') }}</td>
-                <td class="actions"></td>
-            </tr>
-            {% for subscription in subscriptions %}
-                <tr class="g-{{ subscription.groupId }}">
-                    <td>{{ subscription.groupId }}</td>
-                    <td>{{ subscription.firstName }}</td>
-                    <td>{{ subscription.lastName }}</td>
-                    <td>{{ subscription.email }}</td>
-                    <td>
-                        <a href="{{ cpUrl('mail-subscriptions/subscriptions/edit/' ~ subscription.id) }}">{{ 'Edit'|t('mail-subscriptions') }}</a>
-
-                        {% if currentUser.can('formie-createForms') %}
-                        <a href="{{ cpUrl('mail-subscriptions/subscriptions/delete/' ~ subscription.id) }}">{{ 'Delete'|t('mail-subscriptions') }}</a>
-
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+        <div class="tableview tablepane">
+            <table class="data fullwidth">
+                <thead>
+                    <tr>
+                        <th scope="col">{{ 'Group ID' |t('mail-subscriptions') }}</th>
+                        <th scope="col">{{ 'Firstname' |t('mail-subscriptions') }}</th>
+                        <th scope="col">{{ 'Lastname' |t('mail-subscriptions') }}</th>
+                        <th scope="col">{{ 'Email' |t('mail-subscriptions') }}</th>
+                        <th class="thin"></th>
+                        <th class="thin"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subscription in subscriptions %}
+                        <tr class="g-{{ subscription.groupId }}">
+                            <td>{{ subscription.groupId }}</td>
+                            <td>{{ subscription.firstName }}</td>
+                            <td>{{ subscription.lastName }}</td>
+                            <td>{{ subscription.email }}</td>
+                            <td><a href="{{ cpUrl('mail-subscriptions/subscriptions/edit/' ~ subscription.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
+                            <td><a href="{{ cpUrl('mail-subscriptions/subscriptions/delete/' ~ subscription.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 
-{% endblock %}
+{% endblock %}#}
