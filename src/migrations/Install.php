@@ -17,7 +17,7 @@ class Install extends Migration
     public function safeUp(): bool
     {
         $this->createTables();
-
+        $this->addForeignKeys();
         return true;
     }
 
@@ -58,6 +58,12 @@ class Install extends Migration
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
+    }
+
+    protected function addForeignKeys(): void
+    {
+        //TODO check if the cascading works
+        $this->addForeignKey(null, MailSubscriptions_MailGroupRecord::tableName(), ['id'], MailSubscriptions_SubscriptionRecord::tableName(), ['$groupId'], 'CASCADE');
     }
 
     protected function removeTables()

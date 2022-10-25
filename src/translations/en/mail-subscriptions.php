@@ -30,5 +30,10 @@ return [
     'Subscriber' => 'Subscriber',
     'Field Layouts' => 'Field Layouts',
     'Subscription' => 'Subscription',
-    'Mail groups' => 'Mail groups'
+    'Mail groups' => 'Mail groups',
+    'New Subscription' => 'New Subscription',
+    'Group' => 'Group',
+    'An error occured' => 'An error occured',
+    'LastName' => 'LastName',
+    'Settings' => 'Settings'
 ];

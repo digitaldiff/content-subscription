@@ -6,6 +6,9 @@ use publishing\mailsubscriptions\elements\db\SubscriptionQuery;
 
 class Subscription extends Element
 {
+    /**
+     * @inheritdoc
+     */
     public static function displayName(): string
     {
         return \Craft::t('mail-subscriptions', 'Subscription');

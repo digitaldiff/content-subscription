@@ -46,6 +46,8 @@ class GroupsController extends Controller
         $sectionId = $request->getRequiredParam('section');
         $groupId = $request->getRequiredParam('id');
 
+        $enabled = $request->getRequiredParam('enabled');
+
         $subscriptionsService = Plugin::getInstance()->groupsService;
 
         $groupModel = new MailGroupModel;
@@ -54,6 +56,7 @@ class GroupsController extends Controller
         $groupModel->groupName = $groupName;
         $groupModel->emailSubject = $emailSubject;
         $groupModel->emailBody = $emailBody;
+        $groupModel->enabled = $enabled;
 
         $subscriptionsService->updateMailGroup($groupModel);
 
