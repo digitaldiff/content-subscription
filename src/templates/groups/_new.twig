@@ -3,41 +3,18 @@
 {% import '_includes/forms' as forms %}
 
 {% set title = 'New Mail Group' %}
-
+{% set selectedSubnavItem = 'groups' %}
 {% set fullPageForm = true %}
 
-{% set sections = craft.mailSubscriptions.getSections %}
+{% set sections = craft.mailSubscriptions.getSections(true) %}
 
 {% block content %}
+
     {{ forms.hidden({
         name: 'action',
         value: 'mail-subscriptions/groups/save-mail-group'
     }) }}
 
-    {#{% include '_includes/groupFormFields' with { group: group } %}#}
-    {{ forms.selectField({
-        label: 'Section'|t('mail-subscriptions'),
-        name: 'section',
-        value: '',
-        options: sections
-    }) }}
+    {% include 'mail-subscriptions/_includes/groupFormFields' with { group: ''} %}
 
-    {{ forms.textField({
-        label: 'Group name'|t('mail-subscriptions'),
-        name: 'groupName',
-        value: ''
-    }) }}
-
-    {{ forms.textField({
-        label: 'Mail subject'|t('mail-subscriptions'),
-        name: 'emailSubject',
-        value: ''
-    }) }}
-
-    {{ forms.textAreaField({
-        label: 'Mail Message'|t('mail-subscriptions'),
-        name: 'emailMessage',
-        value: '',
-        rows: 8
-    }) }}
 {% endblock %}

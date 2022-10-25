@@ -46,8 +46,6 @@ class GroupsController extends Controller
         $sectionId = $request->getRequiredParam('section');
         $groupId = $request->getRequiredParam('id');
 
-        //TODO set values
-
         $subscriptionsService = Plugin::getInstance()->groupsService;
 
         $groupModel = new MailGroupModel;
@@ -64,7 +62,6 @@ class GroupsController extends Controller
 
     public function actionCreateMailGroup(): Response
     {
-        $request = \Craft::$app->getRequest();
         return $this->renderTemplate('mail-subscriptions/groups/_new');
     }
 
@@ -93,7 +90,7 @@ class GroupsController extends Controller
                 return $this->redirect('mail-subscriptions/groups/');
             }
         }
-        \Craft::$app->getSession()->setError(\Craft::t('mail-subscriptions', 'An error occured'));
+        \Craft::$app->getSession()->setError(\Craft::t('mail-subscriptions', 'An error occurred'));
 
         return $this->redirect('mail-subscriptions/groups/');
     }

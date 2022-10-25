@@ -20,34 +20,15 @@ use craft\helpers\App;
 class SubscriptionsService extends Component
 {
     /**
-     * @param int $groupId
-     * @return array
-     *
-     * If GroupId is not set, this method returns all subscriptions.
-     * Otherwise, only the subscriptions with the corresponding GroupId are returned.
+     * @param int $id
+     * @return SubscriptionModel
      */
-    /*public function getSubscriptions(int $groupId = 0): array
+    public function getSubscription(int $id): SubscriptionModel
     {
-        $result = [];
-        if ($groupId === 0) {
-            $subscriptions =  MailSubscriptions_SubscriptionRecord::find()->all();
-        } else {
-            $subscriptions =  MailSubscriptions_SubscriptionRecord::find()->where(['groupId' => $groupId])->all();
-        }
-
-        foreach ($subscriptions as $subscription) {
-            $subscriptionModel = new SubscriptionModel();
-            $subscriptionModel->id = $subscription->id;
-            $subscriptionModel->groupId = $subscription->groupId;
-            $subscriptionModel->firstName = $subscription->firstName;
-            $subscriptionModel->lastName = $subscription->lastName;
-            $subscriptionModel->email = $subscription->email;
-
-            $result[$subscription->groupId][] = $subscriptionModel;
-        }
-
-        return $result;
-    }*/
+        /** @var MailSubscriptions_SubscriptionRecord $record */
+        $record = MailSubscriptions_SubscriptionRecord::find()->where(['id' => $id])->one();
+        return $this->mapRecordToModel($record);
+    }
 
 
     /**
@@ -59,14 +40,7 @@ class SubscriptionsService extends Component
         $subscriptions =  MailSubscriptions_SubscriptionRecord::find()->all();
 
         foreach ($subscriptions as $subscription) {
-            $subscriptionModel = new SubscriptionModel();
-            $subscriptionModel->id = $subscription->id;
-            $subscriptionModel->groupId = $subscription->groupId;
-            $subscriptionModel->firstName = $subscription->firstName;
-            $subscriptionModel->lastName = $subscription->lastName;
-            $subscriptionModel->email = $subscription->email;
-
-            $result[] = $subscriptionModel;
+            $result[] = $this->mapRecordToModel($subscription);
         }
 
         return $result;
@@ -108,6 +82,26 @@ class SubscriptionsService extends Component
     }
 
     /**
+     * @param SubscriptionModel $subscriptionModel
+     * @return bool
+     * @throws \yii\db\StaleObjectException
+     */
+    public function updateSubscription(SubscriptionModel $subscriptionModel): bool
+    {
+        /** @var MailSubscriptions_SubscriptionRecord $subscriptionRecord */
+        $subscriptionRecord = MailSubscriptions_SubscriptionRecord::find()->where(['id' => $subscriptionModel->id])->one();
+
+        $subscriptionRecord->groupId = $subscriptionModel->groupId;
+        $subscriptionRecord->firstName = $subscriptionModel->firstName;
+        $subscriptionRecord->lastName = $subscriptionModel->lastName;
+        $subscriptionRecord->email = $subscriptionModel->email;
+
+        $subscriptionRecord->update();
+
+        return true;
+    }
+
+    /**
      * @param $id
      * @return bool
      * @throws \Throwable
@@ -122,6 +116,21 @@ class SubscriptionsService extends Component
         }
         return false;
     }
+
+    protected function mapRecordToModel(MailSubscriptions_SubscriptionRecord $record): SubscriptionModel
+    {
+        $subscriptionModel = new SubscriptionModel();
+        $subscriptionModel->id = $record->id;
+        $subscriptionModel->groupId = $record->groupId;
+        $subscriptionModel->firstName = $record->firstName;
+        $subscriptionModel->lastName = $record->lastName;
+        $subscriptionModel->email = $record->email;
+
+        return $subscriptionModel;
+    }
+
+
+
 
     // E-Mail Notification
     // TODO not compatible with new design (sectionId is no longer equal with groupId)

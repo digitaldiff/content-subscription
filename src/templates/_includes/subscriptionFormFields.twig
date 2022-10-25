@@ -1,0 +1,27 @@
+{% import '_includes/forms' as forms %}
+
+    {{ forms.selectField({
+        label: 'Group'|t('mail-subscriptions'),
+        name: 'groupId',
+        value: (subscription) ? subscription.groupId : '',
+        options: groups,
+        first: true
+    }) }}
+
+    {{ forms.textField({
+        label: 'Firstname'|t('mail-subscriptions'),
+        name: 'firstName',
+        value: (subscription) ? subscription.firstName : ''
+    }) }}
+
+    {{ forms.textField({
+        label: 'Lastname'|t('mail-subscriptions'),
+        name: 'lastName',
+        value: (subscription) ? subscription.lastName : ''
+    }) }}
+
+    {{ forms.textField({
+        label: 'Email'|t('mail-subscriptions'),
+        name: 'email',
+        value: (subscription) ? subscription.email : ''
+    }) }}

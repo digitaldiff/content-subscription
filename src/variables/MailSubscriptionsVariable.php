@@ -1,6 +1,7 @@
 <?php
 namespace publishing\mailsubscriptions\variables;
 
+use publishing\mailsubscriptions\models\MailGroupModel;
 use publishing\mailsubscriptions\Plugin;
 
 class MailSubscriptionsVariable
@@ -28,5 +29,18 @@ class MailSubscriptionsVariable
              $result[$section->id] = $section->name;
         }
         return $result;
+    }
+
+    public function getMailGroupLabels()
+    {
+        $result = [];
+        /** @var MailGroupModel[] $groups */
+        $groups = $this->getMailGroups();
+
+        foreach ($groups as $group) {
+            $result[$group->id] = $group->groupName;
+        }
+        return $result;
+
     }
 }

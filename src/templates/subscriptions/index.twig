@@ -1,22 +1,29 @@
+{#
 {% extends '_layouts/elementindex.twig' %}
 {% set title = 'Products' %}
 {% set elementType = 'publishing\\mailsubscriptions\\elements\\Subscription' %}
+#}
 
 
-{#
 {% extends '_layouts/cp' %}
 
 {% import '_includes/forms' as forms %}
 
 {% set title = 'Subscriptions'|t('mail-subscriptions') %}
 {% set groups = craft.mailSubscriptions.getMailGroups %}
+{% set selectedSubnavItem = 'subscriptions' %}
+
+{% set crumbs = [
+    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
+    { label: 'Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions/subscriptions') },
+] %}
 
 {% block headertitle %}
     <h1>{{ title }}</h1>
 {% endblock %}
 
 {% block actionButton %}
-    <a href="{{ cpUrl('mail-subscriptions/subscriptions/new') }}" class="btn submit add icon">{{ 'New Group'|t('mail-subscriptions') }}</a>
+    <a href="{{ cpUrl('mail-subscriptions/subscriptions/new') }}" class="btn submit add icon">{{ 'New Subscription'|t('mail-subscriptions') }}</a>
 {% endblock %}
 
 {% block content %}
@@ -52,4 +59,4 @@
         </div>
     {% endif %}
 
-{% endblock %}#}
+{% endblock %}

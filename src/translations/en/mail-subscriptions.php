@@ -21,5 +21,14 @@ return [
     'New Group' => 'New Group',
     'Firstname' => 'Firstname',
     'Section Select' => 'Section Select',
-    'sectionSelect' => 'sectionSelect'
+    'sectionSelect' => 'sectionSelect',
+    'mail-subscriptions' => 'mail-subscriptions',
+    'Content Subscriptions' => 'Content Subscriptions',
+    'An error occurred' => 'An error occurred',
+    'Group deleted' => 'Group deleted',
+    'Field Layoutss' => 'Field Layoutss',
+    'Subscriber' => 'Subscriber',
+    'Field Layouts' => 'Field Layouts',
+    'Subscription' => 'Subscription',
+    'Mail groups' => 'Mail groups'
 ];

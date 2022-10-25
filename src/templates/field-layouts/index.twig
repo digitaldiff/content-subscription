@@ -3,6 +3,12 @@
 {% import '_includes/forms' as forms %}
 
 {% set title = 'Field Layouts' %}
+{% set selectedSubnavItem = 'field-layouts' %}
+
+{% set crumbs = [
+    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
+    { label: 'Field Layouts' | t('mail-subscriptions'), url: url('mail-subscriptions/field-layouts') },
+] %}
 
 {% block content %}
     {{ forms.fieldLayoutDesignerField({

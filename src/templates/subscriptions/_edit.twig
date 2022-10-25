@@ -9,11 +9,16 @@
 
 {% block content %}
 
-{{ forms.hidden({
-    name: 'action',
-    value: 'mail-subscriptions/subscriptions/save-subscription'
-}) }}
+    {{ forms.hidden({
+        name: 'action',
+        value: 'mail-subscriptions/subscriptions/update-subscription'
+    }) }}
 
-{% include 'mail-subscriptions/_includes/subscriptionFormFields' with { 'subscription': ''} %}
+    {{ forms.hidden({
+        name: 'id',
+        value: subscription.id
+    }) }}
+
+    {% include 'mail-subscriptions/_includes/subscriptionFormFields' %}
 
 {% endblock %}

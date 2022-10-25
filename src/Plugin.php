@@ -20,6 +20,7 @@ use craft\events\ModelEvent;
 
 /**
  * @property GroupsService $groupsService;
+ * @property-read null|array $cpNavItem
  * @property SubscriptionsService $subscriptionsService;
  */
 class Plugin extends \craft\base\Plugin
@@ -78,6 +79,9 @@ class Plugin extends \craft\base\Plugin
                 $event->rules['mail-subscriptions/groups/new'] = 'mail-subscriptions/groups/create-mail-group';
                 $event->rules['mail-subscriptions/groups/edit/<id:\d+>'] = 'mail-subscriptions/groups/edit-mail-group';
                 $event->rules['mail-subscriptions/groups/delete/<id:\d+>'] = 'mail-subscriptions/groups/delete-mail-group';
+                $event->rules['mail-subscriptions/subscriptions/new'] = 'mail-subscriptions/subscriptions/create-subscription';
+                $event->rules['mail-subscriptions/subscriptions/edit/<id:\d+>'] = 'mail-subscriptions/subscriptions/edit-subscription';
+                $event->rules['mail-subscriptions/subscriptions/delete/<id:\d+>'] = 'mail-subscriptions/subscriptions/delete-subscription';
 
             }
         );
@@ -146,7 +150,8 @@ class Plugin extends \craft\base\Plugin
     {
         $nav = parent::getCpNavItem();
 
-        $nav['label'] = 'Mail Subscriptions';
+        $nav['label'] = \Craft::t('mail-subscriptions', 'Content Subscriptions');
+        $nav['url'] = 'mail-subscriptions';
 
         $nav['subnav']['groups'] = [
             'label' => Craft::t('mail-subscriptions', 'Mail groups'),
@@ -159,7 +164,7 @@ class Plugin extends \craft\base\Plugin
         ];
 
         $nav['subnav']['field-layouts'] = [
-            'label' => Craft::t('mail-subscriptions', 'Field Layoutss'),
+            'label' => Craft::t('mail-subscriptions', 'Field Layouts'),
             'url' => 'mail-subscriptions/field-layouts',
         ];
 

@@ -2,7 +2,7 @@
 namespace publishing\mailsubscriptions\elements;
 
 use craft\base\Element;
-use publishing\mailsubscriptions\elements\db\SubscribtionQuery;
+use publishing\mailsubscriptions\elements\db\SubscriptionQuery;
 
 class Subscription extends Element
 {
@@ -11,24 +11,8 @@ class Subscription extends Element
         return \Craft::t('mail-subscriptions', 'Subscription');
     }
 
-    /**
-     * @inheritDoc
-     */
-    public static function refHandle(): ?string
+    public static function find(): SubscriptionQuery
     {
-        return 'subscription';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function hasContent(): bool
-    {
-        return true;
-    }
-
-    public static function find(): SubscribtionQuery
-    {
-        return new SubscribtionQuery(static::class);
+        return new SubscriptionQuery(static::class);
     }
 }

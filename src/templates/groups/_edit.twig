@@ -3,7 +3,7 @@
 {% import '_includes/forms' as forms %}
 
 {% set title = 'Edit Mail Group' %}
-
+{% set selectedSubnavItem = 'groups' %}
 {% set fullPageForm = true %}
 
 {#{% set formActions = [
@@ -27,7 +27,7 @@
     },
 ] %}#}
 
-{% set sections = craft.mailSubscriptions.getSections %}
+{% set sections = craft.mailSubscriptions.getSections(true) %}
 
 {% block content %}
 
@@ -41,31 +41,7 @@
         value: group.id
     }) }}
 
-    {{ forms.selectField({
-        label: 'Section'|t('mail-subscriptions'),
-        name: 'section',
-        value: group.sectionId,
-        options: sections
-    }) }}
-
-    {{ forms.textField({
-        label: 'Group name'|t('mail-subscriptions'),
-        name: 'groupName',
-        value: group.groupName
-    }) }}
-
-    {{ forms.textField({
-        label: 'Mail subject'|t('mail-subscriptions'),
-        name: 'emailSubject',
-        value: group.emailSubject
-    }) }}
-
-    {{ forms.textAreaField({
-        label: 'Mail Message'|t('mail-subscriptions'),
-        name: 'emailMessage',
-        value: group.emailBody,
-        rows: 8
-    }) }}
+    {% include 'mail-subscriptions/_includes/groupFormFields' %}
 
 {% endblock %}
 

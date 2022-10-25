@@ -3,9 +3,15 @@
 {% import '_includes/forms' as forms %}
 
 {% set title = 'Mail Groups' %}
+{% set selectedSubnavItem = 'groups' %}
 
 {% set mailGroups = craft.mailSubscriptions.getMailGroups() %}
-{% set sections = craft.mailSubscriptions.getSections %}
+{% set sections = craft.mailSubscriptions.getSections(true) %}
+
+{% set crumbs = [
+    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
+    { label: 'Groups' | t('mail-subscriptions'), url: url('mail-subscriptions/groups') },
+] %}
 
 {% block headertitle %}
     <h1>{{ title }}</h1>
@@ -37,7 +43,7 @@
                     <tbody>
                     <tr class="s-{{ group.sectionId }}">
                         <td>{{ group.id }}</td>
-                        <td>{{ group.groupName }}</td>
+                        <td><a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
                         <td>{{ sections[group.sectionId] }}</td>
                         {# <td>
                                 <a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ 'Edit'|t('mail-subscriptions') }}</a>
