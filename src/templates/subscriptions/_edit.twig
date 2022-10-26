@@ -2,7 +2,7 @@
 
 {% import '_includes/forms' as forms %}
 
-{% set title = 'New Subscription' %}
+{% set title = 'Edit Subscription' %}
 {% set fullPageForm = true %}
 {% set selectedSubnavItem = 'subscriptions' %}
 {% set groups = craft.mailSubscriptions.getMailGroupLabels %}
@@ -21,4 +21,15 @@
 
     {% include 'mail-subscriptions/_includes/subscriptionFormFields' %}
 
+{% endblock %}
+
+{% block details %}
+    <div id="settings" class="meta">
+        {% include 'mail-subscriptions/_includes/_sidebar' with {'element': subscription} %}
+        {{ forms.lightSwitchField({
+            label: 'Mail verified'|t('mail-subscriptions'),
+            name: 'verificationStatus',
+            on: subscription.verificationStatus
+        }) }}
+    </div>
 {% endblock %}

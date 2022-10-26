@@ -9,59 +9,13 @@ use publishing\mailsubscriptions\services\GroupsService;
 
 class SubscriptionsController extends Controller
 {
+    //
+    //  Form loads
+    //
+
     public function actionCreateSubscription()
     {
         return $this->renderTemplate('mail-subscriptions/subscriptions/_new');
-    }
-
-    public function actionUpdateSubscription()
-    {
-        $request = \Craft::$app->getRequest();
-
-        $id = $request->getRequiredParam('id');
-        $groupId = $request->getRequiredParam('groupId');
-        $firstName = $request->getRequiredParam('firstName');
-        $lastName = $request->getRequiredParam('lastName');
-        $email = $request->getRequiredParam('email');
-
-        $subscriptionModel = new SubscriptionModel;
-        $subscriptionModel->id = $id;
-        $subscriptionModel->groupId = $groupId;
-        $subscriptionModel->firstName = $firstName;
-        $subscriptionModel->lastName = $lastName;
-        $subscriptionModel->email = $email;
-
-        Plugin::getInstance()->subscriptionsService->updateSubscription($subscriptionModel);
-
-        return $this->redirect('mail-subscriptions/subscriptions');
-    }
-
-    /**
-     *
-     * @throws \yii\web\BadRequestHttpException
-     */
-    public function actionSaveSubscription()
-    {
-        $request = \Craft::$app->getRequest();
-
-        $email = $request->getRequiredParam('email');
-        $groupId = $request->getRequiredParam('groupId');
-        $firstName = $request->getRequiredParam('firstName');
-        $lastName = $request->getRequiredParam('lastName');
-
-
-        $subscriptionsService = Plugin::getInstance()->subscriptionsService;
-
-        $subscriptionModel = new SubscriptionModel();
-        $subscriptionModel->id = 0;
-        $subscriptionModel->groupId = $groupId;
-        $subscriptionModel->firstName = $firstName;
-        $subscriptionModel->lastName = $lastName;
-        $subscriptionModel->email = $email;
-
-        $subscriptionsService->saveSubscription($subscriptionModel);
-
-        return $this->redirect('mail-subscriptions/subscriptions');
     }
 
     public function actionEditSubscription(int $id)
@@ -77,6 +31,51 @@ class SubscriptionsController extends Controller
 
         return $this->asFailure('mail-subscriptions/subscriptions');
     }
+
+    //
+    //  DB Operations - Save / Update / Delete
+    //
+
+    public function actionUpdateSubscription()
+    {
+        $request = \Craft::$app->getRequest();
+
+        $subscriptionModel = new SubscriptionModel;
+        $subscriptionModel->id = $request->getRequiredParam('id');
+        $subscriptionModel->groupId = $request->getRequiredParam('groupId');
+        $subscriptionModel->firstName = $request->getRequiredParam('firstName');
+        $subscriptionModel->lastName = $request->getRequiredParam('lastName');
+        $subscriptionModel->email = $request->getRequiredParam('email');
+        $subscriptionModel->enabled = $request->getRequiredParam('enabled');
+        $subscriptionModel->verificationStatus = $request->getRequiredParam('verificationStatus');
+
+        Plugin::getInstance()->subscriptionsService->updateSubscription($subscriptionModel);
+
+        return $this->redirect('mail-subscriptions/subscriptions');
+    }
+
+    /**
+     *
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionSaveSubscription()
+    {
+        $request = \Craft::$app->getRequest();
+
+        $subscriptionsService = Plugin::getInstance()->subscriptionsService;
+
+        $subscriptionModel = new SubscriptionModel();
+        $subscriptionModel->id = 0;
+        $subscriptionModel->email = $request->getRequiredParam('email');
+        $subscriptionModel->groupId = $request->getRequiredParam('groupId');
+        $subscriptionModel->firstName = $request->getRequiredParam('firstName');
+        $subscriptionModel->lastName = $request->getRequiredParam('lastName');
+        $subscriptionModel->enabled = $request->getRequiredParam('enabled');
+        $subscriptionsService->saveSubscription($subscriptionModel);
+
+        return $this->redirect('mail-subscriptions/subscriptions');
+    }
+
 
     public function actionRemoveSubscription()
     {

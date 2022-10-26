@@ -12,56 +12,9 @@ use yii\web\Response;
 
 class GroupsController extends Controller
 {
-    public function actionSaveMailGroup()
-    {
-        $request = \Craft::$app->getRequest();
-
-        $emailSubject = $request->getRequiredParam('emailSubject');
-        $emailBody = $request->getRequiredParam('emailMessage');
-        $groupName = $request->getRequiredParam('groupName');
-        $sectionId = $request->getRequiredParam('section');
-
-        //TODO set values
-
-        $subscriptionsService = Plugin::getInstance()->groupsService;
-
-        $groupModel = new MailGroupModel;
-        $groupModel->sectionId = $sectionId;
-        $groupModel->groupName = $groupName;
-        $groupModel->emailSubject = $emailSubject;
-        $groupModel->emailBody = $emailBody;
-
-        $subscriptionsService->saveMailGroup($groupModel);
-
-        return $this->redirect('mail-subscriptions/groups');
-    }
-
-    public function actionUpdateMailGroup()
-    {
-        $request = \Craft::$app->getRequest();
-
-        $emailSubject = $request->getRequiredParam('emailSubject');
-        $emailBody = $request->getRequiredParam('emailMessage');
-        $groupName = $request->getRequiredParam('groupName');
-        $sectionId = $request->getRequiredParam('section');
-        $groupId = $request->getRequiredParam('id');
-
-        $enabled = $request->getRequiredParam('enabled');
-
-        $subscriptionsService = Plugin::getInstance()->groupsService;
-
-        $groupModel = new MailGroupModel;
-        $groupModel->id = $groupId;
-        $groupModel->sectionId = $sectionId;
-        $groupModel->groupName = $groupName;
-        $groupModel->emailSubject = $emailSubject;
-        $groupModel->emailBody = $emailBody;
-        $groupModel->enabled = $enabled;
-
-        $subscriptionsService->updateMailGroup($groupModel);
-
-        return $this->redirect('mail-subscriptions/groups');
-    }
+    //
+    //  Form loads
+    //
 
     public function actionCreateMailGroup(): Response
     {
@@ -82,6 +35,39 @@ class GroupsController extends Controller
         return $this->asFailure('mail-subscriptions/groups');
     }
 
+    //
+    //  DB Operations - Save / Update / Delete
+    //
+
+    public function actionSaveMailGroup()
+    {
+        $request = \Craft::$app->getRequest();
+
+        $subscriptionsService = Plugin::getInstance()->groupsService;
+
+        $groupModel = new MailGroupModel;
+        $this->mapRequestToModel($request, $groupModel);
+
+        $subscriptionsService->saveMailGroup($groupModel);
+
+        return $this->redirect('mail-subscriptions/groups');
+    }
+
+    public function actionUpdateMailGroup()
+    {
+        $request = \Craft::$app->getRequest();
+
+        $subscriptionsService = Plugin::getInstance()->groupsService;
+
+        $groupModel = new MailGroupModel;
+        $groupModel->id = $request->getRequiredParam('id');
+        $this->mapRequestToModel($request, $groupModel);
+
+        $subscriptionsService->updateMailGroup($groupModel);
+
+        return $this->redirect('mail-subscriptions/groups');
+    }
+
     public function actionDeleteMailGroup($id): Response
     {
         if ($id > 0)
@@ -96,5 +82,21 @@ class GroupsController extends Controller
         \Craft::$app->getSession()->setError(\Craft::t('mail-subscriptions', 'An error occurred'));
 
         return $this->redirect('mail-subscriptions/groups/');
+    }
+
+    /**
+     * @param \craft\web\Request|\craft\console\Request|\yii\web\Request|\yii\console\Request $request
+     * @param MailGroupModel $groupModel
+     * @return void
+     * @throws \yii\web\BadRequestHttpException
+     */
+    protected function mapRequestToModel(\craft\web\Request|\craft\console\Request|\yii\web\Request|\yii\console\Request $request, MailGroupModel $groupModel): void
+    {
+        $groupModel->sectionId = $request->getRequiredParam('section');
+        $groupModel->groupName = $request->getRequiredParam('groupName');
+        $groupModel->emailSubject = $request->getRequiredParam('emailSubject');
+        $groupModel->emailBody = $request->getRequiredParam('emailMessage');
+        $groupModel->enabled = $request->getRequiredParam('enabled');
+        $groupModel->enableUnsubscribing = $request->getRequiredParam('enableUnsubscribing');
     }
 }

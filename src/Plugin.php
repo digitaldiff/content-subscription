@@ -157,8 +157,6 @@ class Plugin extends \craft\base\Plugin
         return $nav;
     }
 
-
-
     protected function createSettingsModel(): ?Model
     {
         return new SettingsModel();

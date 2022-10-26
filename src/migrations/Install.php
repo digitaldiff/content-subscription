@@ -3,8 +3,8 @@ namespace publishing\mailsubscriptions\migrations;
 
 use Craft;
 use craft\db\Migration;
-use publishing\mailsubscriptions\records\MailSubscriptions_MailGroupRecord;
-use publishing\mailsubscriptions\records\MailSubscriptions_SubscriptionRecord;
+use publishing\mailsubscriptions\records\ContentSubscriptions_MailGroupRecord;
+use publishing\mailsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
 
 /**
  * Install migration.
@@ -17,6 +17,7 @@ class Install extends Migration
     public function safeUp(): bool
     {
         $this->createTables();
+        $this->createIndexes();
         $this->addForeignKeys();
         return true;
     }
@@ -33,44 +34,60 @@ class Install extends Migration
 
     protected function createTables(): void
     {
-        $this->archiveTableIfExists(MailSubscriptions_MailGroupRecord::tableName());
-        $this->createTable(MailSubscriptions_MailGroupRecord::tableName(), [
+
+        $this->archiveTableIfExists(ContentSubscriptions_MailGroupRecord::tableName());
+        $this->createTable(ContentSubscriptions_MailGroupRecord::tableName(), [
             'id' => $this->primaryKey(),
             'sectionId' => $this->integer()->notNull(),
             'groupName' => $this->string()->notNull(),
             'emailSubject' => $this->string()->notNull(),
             'emailBody' => $this->string()->notNull(),
-            'dateDeleted' => $this->dateTime(),
+            'enableUnsubscribing' => $this->boolean()->notNull()->defaultValue(true),
+            'enabled' => $this->boolean()->notNull()->defaultValue(true),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
 
-        $this->archiveTableIfExists(MailSubscriptions_SubscriptionRecord::tableName());
-        $this->createTable(MailSubscriptions_SubscriptionRecord::tableName(), [
+        $this->archiveTableIfExists(ContentSubscriptions_SubscriptionRecord::tableName());
+        $this->createTable(ContentSubscriptions_SubscriptionRecord::tableName(), [
             'id' => $this->primaryKey(),
             'groupId' => $this->integer()->notNull(),
             'firstName' => $this->string()->notNull(),
             'lastName' => $this->string()->notNull(),
             'email' => $this->string()->notNull(),
-            'dateDeleted' => $this->dateTime(),
+            'verificationStatus' => $this->boolean()->notNull()->defaultValue(false),
+            'hashValue' => $this->string()->notNull(),
+            'enabled' => $this->boolean()->notNull()->defaultValue(true),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
     }
 
+
+    public function createIndexes(): void
+    {
+        $this->createIndex(null, ContentSubscriptions_SubscriptionRecord::tableName(), 'groupId', false);
+    }
+
     protected function addForeignKeys(): void
     {
-        //TODO check if the cascading works
-        $this->addForeignKey(null, MailSubscriptions_MailGroupRecord::tableName(), ['id'], MailSubscriptions_SubscriptionRecord::tableName(), ['$groupId'], 'CASCADE');
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(),
+            ContentSubscriptions_SubscriptionRecord::tableName(),
+            'id',
+            '{{%elements}}',
+            'id',
+            'CASCADE'
+        );
     }
 
     protected function removeTables()
     {
         $tables = [
-            MailSubscriptions_MailGroupRecord::tableName(),
-            MailSubscriptions_SubscriptionRecord::tableName()
+            ContentSubscriptions_MailGroupRecord::tableName(),
+            ContentSubscriptions_SubscriptionRecord::tableName()
         ];
         foreach ($tables as $table) {
             $this->dropTableIfExists($table);

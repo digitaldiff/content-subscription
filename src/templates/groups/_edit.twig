@@ -6,27 +6,6 @@
 {% set selectedSubnavItem = 'groups' %}
 {% set fullPageForm = true %}
 
-{#{% set formActions = [
-    {
-        label: 'Save and continue editing'|t('mail-subscriptions'),
-        retainScroll: true,
-        shortcut: true,
-        action: 'mail-subscriptions/groups/edit/{group.id}'
-    },
-    {
-        label: 'Save and add another'|t('mail-subscriptions'),
-        action: '/mail-subscriptions/groups/new',
-        shortcut: true,
-        shift: true,
-    },
-    {
-        label: 'Delete'|t('mail-subscriptions'),
-        confirm: 'Are you sure you want to delete this?'|t('plugin-handle'),
-        action: 'mail-subscriptions/groups',
-        destructive: true,
-    },
-] %}#}
-
 {% set sections = craft.mailSubscriptions.getSections(true) %}
 
 {% block content %}
@@ -47,6 +26,11 @@
 
 {% block details %}
     <div id="settings" class="meta">
-        {% include 'mail-subscriptions/_includes/_sidebar' %}
+        {% include 'mail-subscriptions/_includes/_sidebar'  with {'element': group }%}
+        {{ forms.lightSwitchField({
+            label: 'Allow unsubscribing'|t('mail-subscriptions'),
+            name: 'enableUnsubscribing',
+            on: group.enableUnsubscribing
+        }) }}
     </div>
 {% endblock %}

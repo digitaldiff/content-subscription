@@ -7,8 +7,8 @@ use craft\helpers\StringHelper;
 use publishing\mailsubscriptions\models\MailGroupModel;
 use publishing\mailsubscriptions\models\SubscriptionModel;
 use publishing\mailsubscriptions\Plugin;
-use publishing\mailsubscriptions\records\MailSubscriptions_MailGroupRecord;
-use publishing\mailsubscriptions\records\MailSubscriptions_SubscriptionRecord;
+use publishing\mailsubscriptions\records\ContentSubscriptions_MailGroupRecord;
+use publishing\mailsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
 use yii\base\Component;
 use craft\helpers\App;
 
@@ -25,8 +25,8 @@ class SubscriptionsService extends Component
      */
     public function getSubscription(int $id): SubscriptionModel
     {
-        /** @var MailSubscriptions_SubscriptionRecord $record */
-        $record = MailSubscriptions_SubscriptionRecord::find()->where(['id' => $id])->one();
+        /** @var ContentSubscriptions_SubscriptionRecord $record */
+        $record = ContentSubscriptions_SubscriptionRecord::find()->where(['id' => $id])->one();
         return $this->mapRecordToModel($record);
     }
 
@@ -37,7 +37,7 @@ class SubscriptionsService extends Component
     public function getSubscriptions(): array
     {
         $result = [];
-        $subscriptions =  MailSubscriptions_SubscriptionRecord::find()->all();
+        $subscriptions =  ContentSubscriptions_SubscriptionRecord::find()->all();
 
         foreach ($subscriptions as $subscription) {
             $result[] = $this->mapRecordToModel($subscription);
@@ -54,7 +54,7 @@ class SubscriptionsService extends Component
      */
     public function saveSubscription(SubscriptionModel $model): bool
     {
-        $record = new MailSubscriptions_SubscriptionRecord();
+        $record = new ContentSubscriptions_SubscriptionRecord();
 
         $isNewTemplate = !$model->id;
 
@@ -64,17 +64,17 @@ class SubscriptionsService extends Component
                 $model->uid = StringHelper::UUID();
             }
         } else if (!$model->uid) {
-            $model->uid = Db::uidById(MailSubscriptions_SubscriptionRecord::tableName(), $model->id);
+            $model->uid = Db::uidById(ContentSubscriptions_SubscriptionRecord::tableName(), $model->id);
         }
+        $model->generateHash();
 
         $record->id = $model->id;
-        $record->groupId = $model->groupId;
-        $record->firstName = $model->firstName;
-        $record->lastName = $model->lastName;
-        $record->email = $model->email;
-        $record->dateCreated = $model->dateCreated ?? new \DateTime('now');
+        $record->hashValue = $model->hashValue;
+        $record->dateCreated = $model->getDateCreated();
         $record->dateUpdated = $model->dateUpdated ?? new \DateTime('now');
         $record->uid = $model->uid;
+
+        $this->mapModelToRecord($model, $record);
 
         $record->save();
 
@@ -88,13 +88,10 @@ class SubscriptionsService extends Component
      */
     public function updateSubscription(SubscriptionModel $subscriptionModel): bool
     {
-        /** @var MailSubscriptions_SubscriptionRecord $subscriptionRecord */
-        $subscriptionRecord = MailSubscriptions_SubscriptionRecord::find()->where(['id' => $subscriptionModel->id])->one();
+        /** @var ContentSubscriptions_SubscriptionRecord $subscriptionRecord */
+        $subscriptionRecord = ContentSubscriptions_SubscriptionRecord::find()->where(['id' => $subscriptionModel->id])->one();
 
-        $subscriptionRecord->groupId = $subscriptionModel->groupId;
-        $subscriptionRecord->firstName = $subscriptionModel->firstName;
-        $subscriptionRecord->lastName = $subscriptionModel->lastName;
-        $subscriptionRecord->email = $subscriptionModel->email;
+        $this->mapModelToRecord($subscriptionModel, $subscriptionRecord);
 
         $subscriptionRecord->update();
 
@@ -109,15 +106,19 @@ class SubscriptionsService extends Component
     public function removeSubscription($id): bool
     {
         if(\Craft::$app->getUser()->getIdentity()){
-            /** @var MailSubscriptions_SubscriptionRecord $record */
-            $record = MailSubscriptions_SubscriptionRecord::find()->where(['id' => $id])->one();
-            $record->softDelete();
+            /** @var ContentSubscriptions_SubscriptionRecord $record */
+            $record = ContentSubscriptions_SubscriptionRecord::find()->where(['id' => $id])->one();
+            $record->delete();
             return true;
         }
         return false;
     }
 
-    protected function mapRecordToModel(MailSubscriptions_SubscriptionRecord $record): SubscriptionModel
+    /**
+     * @param ContentSubscriptions_SubscriptionRecord $record
+     * @return SubscriptionModel
+     */
+    protected function mapRecordToModel(ContentSubscriptions_SubscriptionRecord $record): SubscriptionModel
     {
         $subscriptionModel = new SubscriptionModel();
         $subscriptionModel->id = $record->id;
@@ -125,19 +126,36 @@ class SubscriptionsService extends Component
         $subscriptionModel->firstName = $record->firstName;
         $subscriptionModel->lastName = $record->lastName;
         $subscriptionModel->email = $record->email;
+        $subscriptionModel->verificationStatus = $record->verificationStatus;
+        $subscriptionModel->hashValue = $record->hashValue;
+        $subscriptionModel->enabled = $record->enabled;
 
         return $subscriptionModel;
     }
 
+    /**
+     * @param SubscriptionModel $subscriptionModel
+     * @param ContentSubscriptions_SubscriptionRecord $subscriptionRecord
+     * @return void
+     */
+    protected function mapModelToRecord(SubscriptionModel $subscriptionModel, ContentSubscriptions_SubscriptionRecord $subscriptionRecord): void
+    {
+        $subscriptionRecord->groupId = $subscriptionModel->groupId;
+        $subscriptionRecord->firstName = $subscriptionModel->firstName;
+        $subscriptionRecord->lastName = $subscriptionModel->lastName;
+        $subscriptionRecord->email = $subscriptionModel->email;
+        $subscriptionRecord->verificationStatus = $subscriptionModel->verificationStatus;
+        $subscriptionRecord->enabled = $subscriptionModel->enabled;
+    }
+    /**
+     * @param ModelEvent $event
+     * @return void
+     */
 
 
 
     // E-Mail Notification
     // TODO not compatible with new design (sectionId is no longer equal with groupId)
-    /**
-     * @param ModelEvent $event
-     * @return void
-     */
 /*    public function notificationEvent($event) {
         $sectionId = $event->sender->sectionId;
         $subscriptions = $this->getSubscriptions($sectionId)[$sectionId];

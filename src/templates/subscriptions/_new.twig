@@ -17,3 +17,14 @@
 {% include 'mail-subscriptions/_includes/subscriptionFormFields' with { 'subscription': ''} %}
 
 {% endblock %}
+
+{% block details %}
+    <div id="settings" class="meta">
+        {% include 'mail-subscriptions/_includes/_sidebar' with {'element': ''} %}
+        {{ forms.lightSwitchField({
+            label: 'Mail verified'|t('mail-subscriptions'),
+            name: 'verificationStatus',
+            on: false
+        }) }}
+    </div>
+{% endblock %}

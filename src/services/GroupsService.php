@@ -9,8 +9,8 @@ use craft\helpers\StringHelper;
 use publishing\mailsubscriptions\models\MailGroupModel;
 use publishing\mailsubscriptions\models\SubscriptionModel;
 use publishing\mailsubscriptions\Plugin;
-use publishing\mailsubscriptions\records\MailSubscriptions_MailGroupRecord;
-use publishing\mailsubscriptions\records\MailSubscriptions_SubscriptionRecord;
+use publishing\mailsubscriptions\records\ContentSubscriptions_MailGroupRecord;
+use publishing\mailsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
 use yii\base\Component;
 use craft\helpers\App;
 use yii\debug\models\search\Mail;
@@ -24,8 +24,8 @@ class GroupsService extends Component
 {
     public function getMailGroup($id): MailGroupModel|null
     {
-        /** @var MailSubscriptions_MailGroupRecord $groupRecord */
-        $groupRecord =  MailSubscriptions_MailGroupRecord::find()->where(['id' => $id])->one();
+        /** @var ContentSubscriptions_MailGroupRecord $groupRecord */
+        $groupRecord =  ContentSubscriptions_MailGroupRecord::find()->where(['id' => $id])->one();
 
         return ($groupRecord) ? $this->mapRecordToModel($groupRecord) : null;
     }
@@ -35,9 +35,9 @@ class GroupsService extends Component
         $result = [];
 
         if ($groupId === 0) {
-            $groupRecords =  MailSubscriptions_MailGroupRecord::find()->all();
+            $groupRecords =  ContentSubscriptions_MailGroupRecord::find()->all();
         } else {
-            $groupRecords =  MailSubscriptions_MailGroupRecord::find()->where(['id' => $groupId])->all();
+            $groupRecords =  ContentSubscriptions_MailGroupRecord::find()->where(['id' => $groupId])->all();
         }
 
         foreach ($groupRecords as $groupRecord) {
@@ -54,18 +54,20 @@ class GroupsService extends Component
      */
     public function saveMailGroup(MailGroupModel $mailGroupModel): bool
     {
-        $newGroupRecord = new MailSubscriptions_MailGroupRecord;
+        $groupRecord = new ContentSubscriptions_MailGroupRecord;
 
-        $newGroupRecord->sectionId = $mailGroupModel->sectionId;
-        $newGroupRecord->groupName = $mailGroupModel->groupName;
-        $newGroupRecord->emailSubject = $mailGroupModel->emailSubject;
-        $newGroupRecord->emailBody = $mailGroupModel->emailBody;
+        $groupRecord->sectionId = $mailGroupModel->sectionId;
+        $groupRecord->groupName = $mailGroupModel->groupName;
+        $groupRecord->emailSubject = $mailGroupModel->emailSubject;
+        $groupRecord->emailBody = $mailGroupModel->emailBody;
+        $groupRecord->enabled = $mailGroupModel->enabled;
+        $groupRecord->enableUnsubscribing = $mailGroupModel->enableUnsubscribing;
 
-        $newGroupRecord->dateCreated = $mailGroupModel->dateCreated ?? new \DateTime('now');
-        $newGroupRecord->dateUpdated = $mailGroupModel->dateUpdated ?? new \DateTime('now');
-        $newGroupRecord->uid = StringHelper::UUID();
+        $groupRecord->dateCreated = $mailGroupModel->getDateCreated();
+        $groupRecord->dateUpdated = $mailGroupModel->getDateUpdated();
+        $groupRecord->uid = StringHelper::UUID();
 
-        $newGroupRecord->save();
+        $groupRecord->save();
 
         return true;
     }
@@ -77,12 +79,14 @@ class GroupsService extends Component
      */
     public function updateMailGroup(MailGroupModel $mailGroupModel): bool
     {
-        $groupRecord = MailSubscriptions_MailGroupRecord::find()->where(['id' => $mailGroupModel->id])->one();
+        $groupRecord = ContentSubscriptions_MailGroupRecord::find()->where(['id' => $mailGroupModel->id])->one();
 
         $groupRecord->sectionId = $mailGroupModel->sectionId;
         $groupRecord->groupName = $mailGroupModel->groupName;
         $groupRecord->emailSubject = $mailGroupModel->emailSubject;
         $groupRecord->emailBody = $mailGroupModel->emailBody;
+        $groupRecord->enabled = $mailGroupModel->enabled;
+        $groupRecord->enableUnsubscribing = $mailGroupModel->enableUnsubscribing;
 
         $groupRecord->update();
 
@@ -92,15 +96,15 @@ class GroupsService extends Component
     public function removeGroup($id): bool
     {
         if(\Craft::$app->getUser()->getIdentity()){
-            /** @var MailSubscriptions_MailGroupRecord $record */
-            $record = MailSubscriptions_MailGroupRecord::find()->where(['id' => $id])->one();
+            /** @var ContentSubscriptions_MailGroupRecord $record */
+            $record = ContentSubscriptions_MailGroupRecord::find()->where(['id' => $id])->one();
             $record->softDelete();
             return true;
         }
         return false;
     }
 
-    protected function mapRecordToModel(MailSubscriptions_MailGroupRecord $record): MailGroupModel
+    protected function mapRecordToModel(ContentSubscriptions_MailGroupRecord $record): MailGroupModel
     {
         $groupModel = new MailGroupModel();
         $groupModel->id = $record->id;
@@ -108,6 +112,8 @@ class GroupsService extends Component
         $groupModel->groupName = $record->groupName;
         $groupModel->emailSubject = $record->emailSubject;
         $groupModel->emailBody = $record->emailBody;
+        $groupModel->enableUnsubscribing = $record->enableUnsubscribing;
+        $groupModel->enabled = $record->enabled;
 
         return $groupModel;
     }

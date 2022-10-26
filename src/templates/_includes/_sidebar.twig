@@ -1,6 +1,7 @@
 {% import '_includes/forms' as forms %}
 
-{{ forms.lightswitchField({
-    label: "Enabled"|t('app'),
-    name: 'enabled',
-}) }}
+    {{ forms.lightswitchField({
+        label: "Enabled"|t('mail-subscriptions'),
+        name: 'enabled',
+        on: (element) ? element.enabled : ''
+    }) }}

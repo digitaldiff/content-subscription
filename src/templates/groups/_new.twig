@@ -18,3 +18,14 @@
     {% include 'mail-subscriptions/_includes/groupFormFields' with { group: ''} %}
 
 {% endblock %}
+
+{% block details %}
+    <div id="settings" class="meta">
+        {% include 'mail-subscriptions/_includes/_sidebar' with {'element': ''} %}
+        {{ forms.lightSwitchField({
+            label: 'Allow unsubscribing'|t('mail-subscriptions'),
+            name: 'enableUnsubscribing',
+            on: true
+        }) }}
+    </div>
+{% endblock %}

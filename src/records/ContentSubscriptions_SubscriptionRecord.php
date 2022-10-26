@@ -2,7 +2,6 @@
 namespace publishing\mailsubscriptions\records;
 
 use craft\db\ActiveRecord;
-use craft\db\SoftDeleteTrait;
 
 /**
  * @property int $id
@@ -10,15 +9,17 @@ use craft\db\SoftDeleteTrait;
  * @property string $firstName
  * @property string $lastName
  * @property string $email
+ * @property bool $verificationStatus;
+ * @property string $hashValue;
+ * @property bool $enabled;
  *
  * @property-read \yii\db\ActiveQueryInterface $element
  */
-class MailSubscriptions_SubscriptionRecord extends ActiveRecord
+class ContentSubscriptions_SubscriptionRecord extends ActiveRecord
 {
-    use SoftDeleteTrait;
 
     public static function tableName()
     {
-        return '{{%mailsubscriptions_subscription}}';
+        return '{{%contentsubscriptions_subscription}}';
     }
 }
