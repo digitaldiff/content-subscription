@@ -1,0 +1,17 @@
+{% import '_includes/forms' as forms %}
+
+<div id="general">
+    {{ forms.selectField({
+        label: 'Section'|t('mail-subscriptions'),
+        name: 'section',
+        value: (group) ? group.sectionId : '',
+        options: sections,
+        first: true,
+    }) }}
+
+    {{ forms.textField({
+        label: 'Group name'|t('mail-subscriptions'),
+    name: 'groupName',
+    value: (group) ? group.groupName : ''
+    }) }}
+</div>

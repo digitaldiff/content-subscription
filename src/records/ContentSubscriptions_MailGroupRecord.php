@@ -8,8 +8,11 @@ use craft\db\ActiveRecord;
  * @property int $sectionId
  * @property string $groupName
  * @property string $emailSubject
+ * @property string $optInSubject
  * @property string $emailBody
+ * @property string $optInBody
  * @property bool $enableUnsubscribing
+ * @property string $unsubscribeMessage
  * @property bool $enabled
  *
  * @property-read \yii\db\ActiveQueryInterface $element

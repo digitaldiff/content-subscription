@@ -11,7 +11,10 @@ class MailGroupModel extends Model
     public string $groupName;
     public string $emailSubject;
     public string $emailBody;
+    public string $optInSubject;
+    public string $optInBody;
     public bool $enableUnsubscribing;
+    public string $unsubscribeMessage;
     public bool $enabled;
     public \DateTime $dateDeleted;
     public \DateTime $dateCreated;
@@ -20,15 +23,17 @@ class MailGroupModel extends Model
 
     public function getDateCreated()
     {
-        if (!isset($this->dateCreated))
+        if (!isset($this->dateCreated)) {
             $this->dateCreated = new \DateTime('now');
+        }
         return $this->dateCreated;
     }
 
     public function getDateUpdated()
     {
-        if (!isset($this->dateUpdated))
+        if (!isset($this->dateUpdated)) {
             $this->dateUpdated = new \DateTime('now');
+        }
         return $this->dateUpdated;
     }
 }

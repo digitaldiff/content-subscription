@@ -56,12 +56,8 @@ class GroupsService extends Component
     {
         $groupRecord = new ContentSubscriptions_MailGroupRecord;
 
-        $groupRecord->sectionId = $mailGroupModel->sectionId;
-        $groupRecord->groupName = $mailGroupModel->groupName;
-        $groupRecord->emailSubject = $mailGroupModel->emailSubject;
-        $groupRecord->emailBody = $mailGroupModel->emailBody;
-        $groupRecord->enabled = $mailGroupModel->enabled;
-        $groupRecord->enableUnsubscribing = $mailGroupModel->enableUnsubscribing;
+        $this->mapModelToRecord($mailGroupModel, $groupRecord);
+
 
         $groupRecord->dateCreated = $mailGroupModel->getDateCreated();
         $groupRecord->dateUpdated = $mailGroupModel->getDateUpdated();
@@ -81,12 +77,7 @@ class GroupsService extends Component
     {
         $groupRecord = ContentSubscriptions_MailGroupRecord::find()->where(['id' => $mailGroupModel->id])->one();
 
-        $groupRecord->sectionId = $mailGroupModel->sectionId;
-        $groupRecord->groupName = $mailGroupModel->groupName;
-        $groupRecord->emailSubject = $mailGroupModel->emailSubject;
-        $groupRecord->emailBody = $mailGroupModel->emailBody;
-        $groupRecord->enabled = $mailGroupModel->enabled;
-        $groupRecord->enableUnsubscribing = $mailGroupModel->enableUnsubscribing;
+        $this->mapModelToRecord($mailGroupModel, $groupRecord);
 
         $groupRecord->update();
 
@@ -104,6 +95,28 @@ class GroupsService extends Component
         return false;
     }
 
+    /**
+     * @param MailGroupModel $mailGroupModel
+     * @param array|\yii\db\ActiveRecord|null $groupRecord
+     * @return void
+     */
+    protected function mapModelToRecord(MailGroupModel $mailGroupModel, array|\yii\db\ActiveRecord|null $groupRecord): void
+    {
+        $groupRecord->sectionId = $mailGroupModel->sectionId;
+        $groupRecord->groupName = $mailGroupModel->groupName;
+        $groupRecord->emailSubject = $mailGroupModel->emailSubject;
+        $groupRecord->emailBody = $mailGroupModel->emailBody;
+        $groupRecord->optInSubject = $mailGroupModel->optInSubject;
+        $groupRecord->optInBody = $mailGroupModel->optInBody;
+        $groupRecord->enableUnsubscribing = $mailGroupModel->enableUnsubscribing;
+        $groupRecord->unsubscribeMessage = $mailGroupModel->unsubscribeMessage;
+        $groupRecord->enabled = $mailGroupModel->enabled;
+    }
+
+    /**
+     * @param ContentSubscriptions_MailGroupRecord $record
+     * @return MailGroupModel
+     */
     protected function mapRecordToModel(ContentSubscriptions_MailGroupRecord $record): MailGroupModel
     {
         $groupModel = new MailGroupModel();
@@ -111,8 +124,11 @@ class GroupsService extends Component
         $groupModel->sectionId = $record->sectionId;
         $groupModel->groupName = $record->groupName;
         $groupModel->emailSubject = $record->emailSubject;
+        $groupModel->optInSubject = $record->optInSubject;
         $groupModel->emailBody = $record->emailBody;
+        $groupModel->optInBody = $record->optInBody;
         $groupModel->enableUnsubscribing = $record->enableUnsubscribing;
+        $groupModel->unsubscribeMessage = $record->unsubscribeMessage;
         $groupModel->enabled = $record->enabled;
 
         return $groupModel;
@@ -120,10 +136,6 @@ class GroupsService extends Component
 
     // E-Mail Notification
     // TODO not compatible with new design (sectionId is no longer equal with groupId)
-    /**
-     * @param ModelEvent $event
-     * @return void
-     */
     /*public function notificationEvent($event) {
         $sectionId = $event->sender->sectionId;
         $subscriptions = $this->getSubscriptions($sectionId)[$sectionId];

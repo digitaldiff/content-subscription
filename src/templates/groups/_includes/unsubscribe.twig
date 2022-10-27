@@ -1,0 +1,9 @@
+{% import '_includes/forms' as forms %}
+
+<div id="unsubscribe" class="hidden">
+    {{ forms.textField({
+        label: 'Unsubscribe message'|t('mail-subscriptions'),
+        name: 'unsubscribeMessage',
+        value: (group) ? group.unsubscribeMessage : ''
+    }) }}
+</div>

@@ -46,6 +46,7 @@ class GroupsController extends Controller
         $subscriptionsService = Plugin::getInstance()->groupsService;
 
         $groupModel = new MailGroupModel;
+
         $this->mapRequestToModel($request, $groupModel);
 
         $subscriptionsService->saveMailGroup($groupModel);
@@ -96,7 +97,10 @@ class GroupsController extends Controller
         $groupModel->groupName = $request->getRequiredParam('groupName');
         $groupModel->emailSubject = $request->getRequiredParam('emailSubject');
         $groupModel->emailBody = $request->getRequiredParam('emailMessage');
-        $groupModel->enabled = $request->getRequiredParam('enabled');
+        $groupModel->optInSubject = $request->getRequiredParam('optInSubject');
+        $groupModel->optInBody = $request->getRequiredParam('optInBody');
         $groupModel->enableUnsubscribing = $request->getRequiredParam('enableUnsubscribing');
+        $groupModel->unsubscribeMessage = $request->getRequiredParam('unsubscribeMessage');
+        $groupModel->enabled = $request->getRequiredParam('enabled');
     }
 }

@@ -6,9 +6,59 @@
 {% set selectedSubnavItem = 'groups' %}
 {% set fullPageForm = true %}
 
+{% set crumbs = [
+    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
+    { label: 'Groups' | t('mail-subscriptions'), url: url('mail-subscriptions/groups') },
+    { label: group.groupName, url: url('mail-subscriptions/groups/edit/'  ~ group.id) },
+] %}
+
 {% set sections = craft.mailSubscriptions.getSections(true) %}
 
+{% set tabs = {
+    general: {
+        label: 'General'|t('mail-subscribtions'),
+        url: '#general',
+    },
+    mail: {
+        label: 'Mail'|t('mail-subscribtions'),
+        url: '#mail',
+    },
+    optIn: {
+        label: 'Opt-In'|t('mail-subscribtions'),
+        url: '#opt-in',
+    },
+    unsubscribe: {
+        label: 'Unsubscribe'|t('mail-subscribtions'),
+        url: '#unsubscribe',
+    },
+} %}
+
+{% set navItems = {
+    'general-heading': { heading: "General"|t('mail-subscriptions') },
+    'settings': { title: "Settings"|t('mail-subscriptions') },
+} %}
+
+{% block sidebar %}
+    <nav>
+        <ul>
+            {% for key, element in navItems %}
+                {% if element.heading is defined %}
+                    <li class="heading">
+                        <span>{{ element.heading }}</span>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ url('mail-subscriptions/groups/edit/' ~ group.id) }}" class="sel">{{ element.title }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
+
 {% block content %}
+
+
 
     {{ forms.hidden({
         name: 'action',
@@ -20,7 +70,10 @@
         value: group.id
     }) }}
 
-    {% include 'mail-subscriptions/_includes/groupFormFields' %}
+    {% include 'mail-subscriptions/groups/_includes/general' %}
+    {% include 'mail-subscriptions/groups/_includes/mail' %}
+    {% include 'mail-subscriptions/groups/_includes/opt-in' %}
+    {% include 'mail-subscriptions/groups/_includes/unsubscribe' %}
 
 {% endblock %}
 

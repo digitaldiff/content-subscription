@@ -7,6 +7,12 @@
 {% set selectedSubnavItem = 'subscriptions' %}
 {% set groups = craft.mailSubscriptions.getMailGroupLabels %}
 
+{% set crumbs = [
+    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
+    { label: 'Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions/subscriptions') },
+    { label: subscription.email, url: url('mail-subscriptions/subscriptions/edit/'  ~ subscription.id) },
+] %}
+
 {% block content %}
 
     {{ forms.hidden({

@@ -1,0 +1,16 @@
+{% import '_includes/forms' as forms %}
+
+<div id="mail" class="hidden">
+    {{ forms.textField({
+        label: 'Mail subject'|t('mail-subscriptions'),
+        name: 'emailSubject',
+        value: (group) ? group.emailSubject : ''
+    }) }}
+
+    {{ forms.textAreaField({
+        label: 'Mail Message'|t('mail-subscriptions'),
+        name: 'emailMessage',
+        value: (group) ? group.emailBody : '',
+        rows: 8
+    }) }}
+</div>
