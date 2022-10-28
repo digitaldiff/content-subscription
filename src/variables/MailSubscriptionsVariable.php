@@ -1,8 +1,12 @@
 <?php
 namespace publishing\mailsubscriptions\variables;
 
+use craft\helpers\Template as TemplateHelper;
+use craft\web\View;
 use publishing\mailsubscriptions\models\MailGroupModel;
+use publishing\mailsubscriptions\models\SubscriptionModel;
 use publishing\mailsubscriptions\Plugin;
+use function Psy\debug;
 
 class MailSubscriptionsVariable
 {
@@ -41,6 +45,31 @@ class MailSubscriptionsVariable
             $result[$group->id] = $group->groupName;
         }
         return $result;
+    }
 
+    /**
+     * @param $id
+     * @return string|\Twig\Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
+     *
+     * Render a form element to enable site visitors to sign up for the mail subscription
+     */
+    public function getSubscriptionForm($id)
+    {
+        $reasef =
+        $view = \Craft::$app->getView();
+
+        $templatePath = 'mail-subscriptions/_forms/subscription-form.twig';
+
+        $fields = (new SubscriptionModel())->getFormProperties($id);
+
+        if ($view->doesTemplateExist($templatePath, View::TEMPLATE_MODE_CP)) {
+            $html = $view->renderTemplate($templatePath, $fields, View::TEMPLATE_MODE_CP);
+            return TemplateHelper::raw($html);
+        }
+        return '';
     }
 }

@@ -51,28 +51,20 @@ class SubscriptionsService extends Component
      * @param SubscriptionModel $model
      * @return bool
      * @throws \Exception
+     *
+     * Save NEW subscriptions
      */
     public function saveSubscription(SubscriptionModel $model): bool
     {
         $record = new ContentSubscriptions_SubscriptionRecord();
 
-        $isNewTemplate = !$model->id;
-
-        // Make sure it's got a UUID
-        if ($isNewTemplate) {
-            if (empty($this->uid)) {
-                $model->uid = StringHelper::UUID();
-            }
-        } else if (!$model->uid) {
-            $model->uid = Db::uidById(ContentSubscriptions_SubscriptionRecord::tableName(), $model->id);
-        }
         $model->generateHash();
 
-        $record->id = $model->id;
+        $record->id = 0;
         $record->hashValue = $model->hashValue;
         $record->dateCreated = $model->getDateCreated();
-        $record->dateUpdated = $model->dateUpdated ?? new \DateTime('now');
-        $record->uid = $model->uid;
+        $record->dateUpdated = $model->getDateUpdated();
+        $record->uid = StringHelper::UUID();
 
         $this->mapModelToRecord($model, $record);
 
@@ -85,6 +77,9 @@ class SubscriptionsService extends Component
      * @param SubscriptionModel $subscriptionModel
      * @return bool
      * @throws \yii\db\StaleObjectException
+     *
+     *  Update EXISTING subscriptions
+     *
      */
     public function updateSubscription(SubscriptionModel $subscriptionModel): bool
     {

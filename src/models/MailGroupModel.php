@@ -16,7 +16,6 @@ class MailGroupModel extends Model
     public bool $enableUnsubscribing;
     public string $unsubscribeMessage;
     public bool $enabled;
-    public \DateTime $dateDeleted;
     public \DateTime $dateCreated;
     public \DateTime $dateUpdated;
     public string $uid;

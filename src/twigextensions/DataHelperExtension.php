@@ -2,6 +2,8 @@
 namespace publishing\mailsubscriptions\twigextensions;
 
 use Craft;
+use publishing\mailsubscriptions\models\SubscriptionModel;
+use publishing\mailsubscriptions\Plugin;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -23,13 +25,19 @@ class DataHelperExtension extends AbstractExtension
         return implode(', ', $list);
     }
 
+/*    public function getSubscriptionForm()
+    {
+        return (new SubscriptionModel())->getSubscriptionForm();
+    }*/
+
     /**
      * @return TwigFunction[]
      */
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('', [$this, 'availableTags']),
+            new TwigFunction('availableTags', [$this, 'availableTags']),
+            new TwigFunction('getSubscriptionForm', [$this, 'getSubscriptionForm']),
         ];
     }
 }

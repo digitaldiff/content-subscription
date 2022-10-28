@@ -33,6 +33,18 @@ class SubscriptionModel extends Model
 
     public function generateHash()
     {
-        $this->hashValue = hash('sha256', $this->dateCreated->format('Y-m-d H:i:s') . $this->email);
+        $this->hashValue = hash('sha256', $this->getDateCreated()->format('Y-m-d H:i:s') . $this->email);
+    }
+
+    public function getFormProperties($id)
+    {
+        return [
+            'id' => $id,
+            'fieldTypes' => [
+                'firstName' => 'string',
+                'lastName' => 'string',
+                'email' => 'string',
+            ]
+        ];
     }
 }

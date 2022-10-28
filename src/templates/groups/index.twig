@@ -40,6 +40,7 @@
                     <th scope="col">{{ 'Section' |t('mail-subscriptions') }}</th>
                     <th class="thin"></th>
                     <th class="thin"></th>
+                    <th class="thin"></th>
                 </tr>
                 </thead>
                 {% for group in mailGroups %}
@@ -54,6 +55,8 @@
                                     <a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}">{{ 'Delete'|t('mail-subscriptions') }}</a>
                                 {% endif %}
                             </td>#}
+                        {# TODO fix text #}
+                        <td><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.mailSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
                         <td><a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
                         <td><a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
                     </tr>
@@ -62,8 +65,6 @@
             </table>
         </div>
     {% endif %}
-
-
 
     {#{% set text = 'Enter a message. Available tags: ' ~ availableTags() %}#}
     {#

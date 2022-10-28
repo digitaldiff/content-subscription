@@ -1,0 +1,13 @@
+{# TODO make spam-proof #}
+<form>
+    <input type="hidden" name="action" value="mail-subscriptions/subscriptions/subscribe-to-group">
+    <input type="hidden" name="groupId" value="{{ id }}"
+    {% for field, type in fieldTypes %}
+        {% if (type == 'string') %}
+            <label for="#{{ field }}">{{ field|t('mail-subscriptions') }}</label>
+            <input id="#{{ field }}" name="{{ field }}" {{ (field == 'email') ? 'type=' ~ field : '' }} required />
+        {% endif %}
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
