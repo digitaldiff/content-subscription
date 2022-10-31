@@ -19,6 +19,8 @@ use craft\helpers\App;
  */
 class SubscriptionsService extends Component
 {
+    public const EVENT_USER_SUBSCRIBED = 'eventUserSubscribed';
+
     /**
      * @param int $id
      * @return SubscriptionModel
@@ -26,7 +28,10 @@ class SubscriptionsService extends Component
     public function getSubscription(int $id): SubscriptionModel
     {
         /** @var ContentSubscriptions_SubscriptionRecord $record */
-        $record = ContentSubscriptions_SubscriptionRecord::find()->where(['id' => $id])->one();
+        $record = ContentSubscriptions_SubscriptionRecord::find()
+            ->where(['id' => $id])
+            ->one();
+
         return $this->mapRecordToModel($record);
     }
 
@@ -37,6 +42,7 @@ class SubscriptionsService extends Component
     public function getSubscriptions(): array
     {
         $result = [];
+
         $subscriptions =  ContentSubscriptions_SubscriptionRecord::find()->all();
 
         foreach ($subscriptions as $subscription) {
@@ -44,7 +50,26 @@ class SubscriptionsService extends Component
         }
 
         return $result;
+    }
 
+    public function getSubscriptionsForMailNotifications(array $groupIds)
+    {
+        $result = [];
+
+        $subscriptions =  ContentSubscriptions_SubscriptionRecord::find()
+            ->where([
+                'groupId' => $groupIds,
+                'enabled' => true,
+                'verificationStatus' => true
+            ])
+            ->all();
+
+        foreach ($subscriptions as $subscription) {
+            //make sure everyone only gets one notification per run, even when part of multiple affected groups
+            $result[$subscription->email] = $this->mapRecordToModel($subscription);
+        }
+
+        return $result;
     }
 
     /**
@@ -103,7 +128,7 @@ class SubscriptionsService extends Component
         if(\Craft::$app->getUser()->getIdentity()){
             /** @var ContentSubscriptions_SubscriptionRecord $record */
             $record = ContentSubscriptions_SubscriptionRecord::find()->where(['id' => $id])->one();
-            $record->delete();
+            $record?->delete();
             return true;
         }
         return false;

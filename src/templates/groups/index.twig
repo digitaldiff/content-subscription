@@ -35,9 +35,10 @@
                     {# TODO date edited #}
                     {# TODO date created #}
                     {# TODO provide unsubscribing-option #}
-                    <th scope="col">{{ 'Group ID' |t('mail-subscriptions') }}</th>
+                    {#<th scope="col">{{ 'Group ID' |t('mail-subscriptions') }}</th>#}
                     <th scope="col">{{ 'Group Name' |t('mail-subscriptions') }}</th>
                     <th scope="col">{{ 'Section' |t('mail-subscriptions') }}</th>
+                    <th class="col"></th>
                     <th class="thin"></th>
                     <th class="thin"></th>
                     <th class="thin"></th>
@@ -46,7 +47,7 @@
                 {% for group in mailGroups %}
                     <tbody>
                     <tr class="s-{{ group.sectionId }}">
-                        <td>{{ group.id }}</td>
+                       {# <td>{{ group.id }}</td>#}
                         <td><a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
                         <td>{{ sections[group.sectionId] }}</td>
                         {# <td>
@@ -56,6 +57,7 @@
                                 {% endif %}
                             </td>#}
                         {# TODO fix text #}
+                        <td><p class="code copytextbtn" onclick="navigator.clipboard.writeText('\{\{ craft.mailSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');">{{ '\{\{ craft.mailSubscriptions.getSubscriptionForm(' ~ group.id ~ ') \}\}' }}</p></td>
                         <td><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.mailSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
                         <td><a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
                         <td><a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>

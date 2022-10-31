@@ -21,8 +21,9 @@ use craft\events\ModelEvent;
 
 /**
  * @property GroupsService $groupsService;
- * @property-read null|array $cpNavItem
  * @property SubscriptionsService $subscriptionsService;
+ * @property NotificationsService $notificationsService;
+ * @property-read null|array $cpNavItem
  */
 class Plugin extends \craft\base\Plugin
 {
@@ -79,12 +80,9 @@ class Plugin extends \craft\base\Plugin
             Entry::EVENT_AFTER_SAVE,
             function (ModelEvent $event) {
                 if (
-                    !($event->sender->duplicateOf && $event->sender->getIsCanonical() && !$event->sender->updatingFromDerivative) &&
-                    $event->sender->firstSave
+                    $_POST['content-subscription']
                 ) {
-                    //check if sending is enabled
-                    d(\Craft::$app->getRequest()->getParam('content-subscription'));
-                    self::getInstance()->groupsService->notificationEvent($event);
+                    $this->notificationsService->notificationEvent($event);
                 }
             }
         );

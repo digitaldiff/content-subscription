@@ -35,4 +35,9 @@ class MailGroupModel extends Model
         }
         return $this->dateUpdated;
     }
+
+    public function getTags()
+    {
+        return ['##firstname##', '##lastname##', '##email##'];
+    }
 }

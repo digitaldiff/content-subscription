@@ -3,6 +3,7 @@
 namespace publishing\mailsubscriptions\controllers;
 
 use craft\web\Controller;
+use publishing\mailsubscriptions\events\UserSubscribedEvent;
 use publishing\mailsubscriptions\models\SubscriptionModel;
 use publishing\mailsubscriptions\Plugin;
 use publishing\mailsubscriptions\services\SubscriptionsService;
@@ -40,7 +41,6 @@ class SubscriptionsController extends Controller
     {
         $request = \Craft::$app->getRequest();
 
-        return $this->redirect($request->getFullPath());
         $subscriptionModel = new SubscriptionModel;
 
         $subscriptionModel->groupId = $request->getRequiredParam('groupId');
@@ -53,9 +53,19 @@ class SubscriptionsController extends Controller
 
         $subscriptionModel->generateHash();
 
-        (Plugin::getInstance()->subscriptionsService)->saveSubscription($subscriptionModel);
 
-        return $this->renderTemplate($request->getFullUri());
+        $subscriptionService = Plugin::getInstance()->subscriptionsService;
+        $success = $subscriptionService->saveSubscription($subscriptionModel);
+
+        // Trigger event on subscription
+        if ($success) {
+            $event = new UserSubscribedEvent([
+                'subscriptionModel' => $subscriptionModel,
+            ]);
+            $this->trigger($subscriptionService::EVENT_USER_SUBSCRIBED, $event);
+        }
+
+        return $this->redirect($request->getFullPath());
     }
 
     //
