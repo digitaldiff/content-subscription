@@ -2,12 +2,14 @@
 
 namespace publishing\mailsubscriptions\controllers;
 
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use craft\helpers\Template as TemplateHelper;
 use craft\web\Application;
 use craft\web\Controller;
 use publishing\mailsubscriptions\events\UserSubscribedEvent;
 use publishing\mailsubscriptions\models\SubscriptionModel;
 use publishing\mailsubscriptions\Plugin;
+use publishing\mailsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
 use publishing\mailsubscriptions\services\SubscriptionsService;
 
 class SubscriptionsController extends Controller
@@ -15,11 +17,11 @@ class SubscriptionsController extends Controller
     public function actionValidate(string $hashValue)
     {
         $template = 'mail-subscriptions/test/_message';
-        $message = 'Link ungültig.';
+        $message = \Craft::t('mail-subscriptions', 'Link not valid.');
 
         if (Plugin::getInstance()->subscriptionsService->validateSubscription($hashValue)) {
             //return $this->renderTemplate('mail-subscriptions/subscriptions/_new');
-            $message = 'Account erfolgreich aktiviert.';
+            $message = \Craft::t('mail-subscriptions', 'Account successfully activated.');
         }
 
         if ($this->view->doesTemplateExist($template, $this->view::TEMPLATE_MODE_CP)) {
@@ -54,6 +56,20 @@ class SubscriptionsController extends Controller
         }
 
         return $this->asFailure('mail-subscriptions/subscriptions');
+    }
+
+    public function actionSendVerificationMail($hashValue)
+    {
+        if (!\Craft::$app->getUser()->getIdentity()) {
+           return '';
+        }
+        if (Plugin::getInstance()->notificationsService->initiateVerification($hashValue)) {
+            \Craft::$app->getSession()->setSuccess(\Craft::t('mail-subscriptions', 'Verification mail sent.'));
+        } else {
+            \Craft::$app->getSession()->setError(\Craft::t('mail-subscriptions', 'Verification mail couldn\'t be sent.'));
+        }
+
+        return $this->redirect('mail-subscriptions/subscriptions');
     }
 
     //

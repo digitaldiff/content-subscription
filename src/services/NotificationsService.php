@@ -34,12 +34,12 @@ class NotificationsService extends Component
      * @return void
      * @throws \yii\base\InvalidConfigException
      */
-    public  function initiateVerification($hashValue)
+    public  function initiateVerification($hashValue): bool
     {
         $subscription = Plugin::getInstance()->subscriptionsService->getSubscriptionByHash($hashValue);
         $group = Plugin::getInstance()->groupsService->getMailGroup($subscription->groupId);
         if ($group === null) {
-            return null;
+            return false;
         }
 
         $attributes = get_object_vars($subscription);
@@ -63,7 +63,7 @@ class NotificationsService extends Component
 
         $body = str_replace('##verificationLink##', $url, $body);
 
-        $this->sendMail(\Craft::$app->getMailer(), $group->optInSubject, $body, $subscription->email);
+        return $this->sendMail(\Craft::$app->getMailer(), $group->optInSubject, $body, $subscription->email);
     }
 
     /**

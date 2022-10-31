@@ -37,5 +37,8 @@
             name: 'verificationStatus',
             on: subscription.verificationStatus
         }) }}
+        <div class="field">
+            <a href="{{ cpUrl('mail-subscriptions/subscriptions/sendVerificationMail/' ~ subscription.hashValue) }}">{{ 'Resend verification mail'|t('mail-subscriptions') }}</a>
+        </div>
     </div>
 {% endblock %}

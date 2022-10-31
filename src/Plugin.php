@@ -68,7 +68,7 @@ class Plugin extends \craft\base\Plugin
                 $event->rules['mail-subscriptions/subscriptions/new'] = 'mail-subscriptions/subscriptions/create-subscription';
                 $event->rules['mail-subscriptions/subscriptions/edit/<id:\d+>'] = 'mail-subscriptions/subscriptions/edit-subscription';
                 $event->rules['mail-subscriptions/subscriptions/delete/<id:\d+>'] = 'mail-subscriptions/subscriptions/delete-subscription';
-
+                $event->rules['mail-subscriptions/subscriptions/sendVerificationMail/<hashValue:\w+>'] = 'mail-subscriptions/subscriptions/send-verification-mail';
             }
         );
 
