@@ -35,6 +35,15 @@ class SubscriptionsService extends Component
         return $this->mapRecordToModel($record);
     }
 
+    public function getSubscriptionByHash(string $hashValue): SubscriptionModel
+    {
+        /** @var ContentSubscriptions_SubscriptionRecord $record */
+        $record = ContentSubscriptions_SubscriptionRecord::find()
+            ->where(['hashValue' => $hashValue])
+            ->one();
+
+        return $this->mapRecordToModel($record);
+    }
 
     /**
      * @return array
@@ -79,7 +88,7 @@ class SubscriptionsService extends Component
      *
      * Save NEW subscriptions
      */
-    public function saveSubscription(SubscriptionModel $model): bool
+    public function saveSubscription(SubscriptionModel $model): string
     {
         $record = new ContentSubscriptions_SubscriptionRecord();
 
@@ -95,7 +104,7 @@ class SubscriptionsService extends Component
 
         $record->save();
 
-        return true;
+        return $record->hashValue;
     }
 
     /**
@@ -106,7 +115,7 @@ class SubscriptionsService extends Component
      *  Update EXISTING subscriptions
      *
      */
-    public function updateSubscription(SubscriptionModel $subscriptionModel): bool
+    public function updateSubscription(SubscriptionModel $subscriptionModel)
     {
         /** @var ContentSubscriptions_SubscriptionRecord $subscriptionRecord */
         $subscriptionRecord = ContentSubscriptions_SubscriptionRecord::find()->where(['id' => $subscriptionModel->id])->one();
@@ -114,8 +123,11 @@ class SubscriptionsService extends Component
         $this->mapModelToRecord($subscriptionModel, $subscriptionRecord);
 
         $subscriptionRecord->update();
+    }
 
-        return true;
+    public function validateSubscription($hashValue): bool
+    {
+        return ContentSubscriptions_SubscriptionRecord::updateAll(['verificationStatus' => true ], ['hashValue' => $hashValue, 'verificationStatus' => false]);
     }
 
     /**

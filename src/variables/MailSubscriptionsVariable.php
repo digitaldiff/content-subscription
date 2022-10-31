@@ -59,7 +59,6 @@ class MailSubscriptionsVariable
      */
     public function getSubscriptionForm($id)
     {
-        $reasef =
         $view = \Craft::$app->getView();
 
         $templatePath = 'mail-subscriptions/_forms/subscription-form.twig';

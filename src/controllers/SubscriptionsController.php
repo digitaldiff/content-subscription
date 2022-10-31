@@ -2,6 +2,8 @@
 
 namespace publishing\mailsubscriptions\controllers;
 
+use craft\helpers\Template as TemplateHelper;
+use craft\web\Application;
 use craft\web\Controller;
 use publishing\mailsubscriptions\events\UserSubscribedEvent;
 use publishing\mailsubscriptions\models\SubscriptionModel;
@@ -10,6 +12,27 @@ use publishing\mailsubscriptions\services\SubscriptionsService;
 
 class SubscriptionsController extends Controller
 {
+    public function actionValidate(string $hashValue)
+    {
+        $template = 'mail-subscriptions/test/_message';
+        $message = 'Link ungültig.';
+
+        if (Plugin::getInstance()->subscriptionsService->validateSubscription($hashValue)) {
+            //return $this->renderTemplate('mail-subscriptions/subscriptions/_new');
+            $message = 'Account erfolgreich aktiviert.';
+        }
+
+        if ($this->view->doesTemplateExist($template, $this->view::TEMPLATE_MODE_CP)) {
+            $html = $this->view->renderTemplate($template, ['message' => $message], $this->view::TEMPLATE_MODE_CP);
+            return TemplateHelper::raw($html);
+        }
+        return '';
+
+    }
+    public function actionTest()
+    {
+        dd('hello');
+    }
     //
     //  CP Form loads
     //
@@ -53,12 +76,14 @@ class SubscriptionsController extends Controller
 
         $subscriptionModel->generateHash();
 
-
         $subscriptionService = Plugin::getInstance()->subscriptionsService;
-        $success = $subscriptionService->saveSubscription($subscriptionModel);
+        $hashValue = $subscriptionService->saveSubscription($subscriptionModel);
 
         // Trigger event on subscription
-        if ($success) {
+        if ($hashValue) {
+            // TODO send double opt-in mail
+            Plugin::getInstance()->notificationsService->initiateVerification($hashValue);
+
             $event = new UserSubscribedEvent([
                 'subscriptionModel' => $subscriptionModel,
             ]);
