@@ -37,8 +37,12 @@ class NotificationsService extends Component
     public  function initiateVerification($hashValue): bool
     {
         $subscription = Plugin::getInstance()->subscriptionsService->getSubscriptionByHash($hashValue);
+        if (!$subscription) {
+            return false;
+        }
+
         $group = Plugin::getInstance()->groupsService->getMailGroup($subscription->groupId);
-        if ($group === null) {
+        if (!$group) {
             return false;
         }
 
@@ -96,6 +100,14 @@ class NotificationsService extends Component
 
             foreach ($attributes as $key => $attribute) {
                 $body = str_replace('##' . $key . '##', $subscription->$key, $body);
+            }
+
+            if ($group->enableUnsubscribing) {
+                $url = UrlHelper::actionUrl('mail-subscriptions/subscriptions/unsubscribe/?hashValue=' . $subscription->hashValue);
+
+                $body = str_replace('##unsubscribeLink##', $url, $body);
+            } else {
+                $body = str_replace('##unsubscribeLink##', '', $body);
             }
 
             if ($this->sendMail($mailer, $groups[$subscription->groupId]->emailSubject, $body, $subscription->email )) {

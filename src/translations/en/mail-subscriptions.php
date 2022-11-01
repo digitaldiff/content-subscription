@@ -53,5 +53,14 @@ return [
     'Mail verified' => 'Mail verified',
     'firstName' => 'Firstname',
     'lastName' => 'Lastname',
-    'email' => 'Email'
+    'email' => 'Email',
+    '{success} subscribers successfully notified, {failures} failures' => '{success} subscribers successfully notified, {failures} failures',
+    'Verification mail sent.' => 'Verification mail sent.',
+    'E-Mail successfully verified.' => 'E-Mail successfully verified.',
+    '{} Messages have been sent.' => '{} Messages have been sent.',
+    'Verification mail couldn\'t be sent.' => 'Verification mail couldn\'t be sent.',
+    'Link not valid.' => 'Link not valid.',
+    '{$count} Messages have been sent.' => '{$count} Messages have been sent.',
+    'Resend verification mail' => 'Resend verification mail',
+    'Messages have been sent.' => 'Messages have been sent.'
 ];

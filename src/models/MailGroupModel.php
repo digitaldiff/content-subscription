@@ -36,8 +36,10 @@ class MailGroupModel extends Model
         return $this->dateUpdated;
     }
 
-    public function getTags()
+    public function getAvailableTags()
     {
-        return ['##firstname##', '##lastname##', '##email##'];
+        return [
+
+        ];
     }
 }

@@ -47,4 +47,11 @@ class SubscriptionModel extends Model
             ]
         ];
     }
+
+    public function getAvailableTags()
+    {
+        return [
+            'firstName', 'lastName', 'email'
+        ];
+    }
 }

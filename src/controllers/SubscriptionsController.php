@@ -14,14 +14,22 @@ use publishing\mailsubscriptions\services\SubscriptionsService;
 
 class SubscriptionsController extends Controller
 {
+    /**
+     * @param string $hashValue
+     * @return string|\Twig\Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
+     */
     public function actionValidate(string $hashValue)
     {
-        $template = 'mail-subscriptions/test/_message';
+        $template = 'mail-subscriptions/layouts/_message';
         $message = \Craft::t('mail-subscriptions', 'Link not valid.');
 
         if (Plugin::getInstance()->subscriptionsService->validateSubscription($hashValue)) {
             //return $this->renderTemplate('mail-subscriptions/subscriptions/_new');
-            $message = \Craft::t('mail-subscriptions', 'Account successfully activated.');
+            $message = \Craft::t('mail-subscriptions', 'E-Mail successfully verified.');
         }
 
         if ($this->view->doesTemplateExist($template, $this->view::TEMPLATE_MODE_CP)) {
@@ -31,6 +39,26 @@ class SubscriptionsController extends Controller
         return '';
 
     }
+
+    public function actionUnsubscribe(string $hashValue)
+    {
+        $template = 'mail-subscriptions/layouts/_message';
+        $message = \Craft::t('mail-subscriptions', 'Link not valid.');
+
+        $subscription = Plugin::getInstance()->subscriptionsService->getSubscriptionByHash($hashValue);
+        if ($subscription) {
+            $group = Plugin::getInstance()->groupsService->getMailGroup($subscription->groupId);
+
+            if(Plugin::getInstance()->subscriptionsService->userUnsubscribe($hashValue)) {
+                $message = $group?->unsubscribeMessage;
+            }
+        }
+        if ($this->view->doesTemplateExist($template, $this->view::TEMPLATE_MODE_CP)) {
+            $html = $this->view->renderTemplate($template, ['message' => $message], $this->view::TEMPLATE_MODE_CP);
+            return TemplateHelper::raw($html);
+        }
+    }
+
     public function actionTest()
     {
         dd('hello');
@@ -97,7 +125,6 @@ class SubscriptionsController extends Controller
 
         // Trigger event on subscription
         if ($hashValue) {
-            // TODO send double opt-in mail
             Plugin::getInstance()->notificationsService->initiateVerification($hashValue);
 
             $event = new UserSubscribedEvent([

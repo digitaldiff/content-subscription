@@ -25,24 +25,24 @@ class SubscriptionsService extends Component
      * @param int $id
      * @return SubscriptionModel
      */
-    public function getSubscription(int $id): SubscriptionModel
+    public function getSubscription(int $id): ?SubscriptionModel
     {
         /** @var ContentSubscriptions_SubscriptionRecord $record */
         $record = ContentSubscriptions_SubscriptionRecord::find()
             ->where(['id' => $id])
             ->one();
 
-        return $this->mapRecordToModel($record);
+        return $record ? $this->mapRecordToModel($record) : null;
     }
 
-    public function getSubscriptionByHash(string $hashValue): SubscriptionModel
+    public function getSubscriptionByHash(string $hashValue): ?SubscriptionModel
     {
         /** @var ContentSubscriptions_SubscriptionRecord $record */
         $record = ContentSubscriptions_SubscriptionRecord::find()
             ->where(['hashValue' => $hashValue])
             ->one();
 
-        return $this->mapRecordToModel($record);
+        return $record ? $this->mapRecordToModel($record) : null;
     }
 
     /**
@@ -144,6 +144,17 @@ class SubscriptionsService extends Component
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param $hashValue
+     * @return bool
+     * @throws \yii\db\StaleObjectException
+     */
+    public function userUnsubscribe($hashValue): bool
+    {
+        $record = ContentSubscriptions_SubscriptionRecord::find()->where(['hashValue' => $hashValue])->one();
+        return $record?->delete();
     }
 
     /**
