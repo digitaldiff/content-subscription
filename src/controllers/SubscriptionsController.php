@@ -1,16 +1,15 @@
 <?php
 
-namespace publishing\mailsubscriptions\controllers;
+namespace publishing\contentsubscriptions\controllers;
 
 use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use craft\helpers\Template as TemplateHelper;
 use craft\web\Application;
 use craft\web\Controller;
-use publishing\mailsubscriptions\events\UserSubscribedEvent;
-use publishing\mailsubscriptions\models\SubscriptionModel;
-use publishing\mailsubscriptions\Plugin;
-use publishing\mailsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
-use publishing\mailsubscriptions\services\SubscriptionsService;
+use publishing\contentsubscriptions\models\SubscriptionModel;
+use publishing\contentsubscriptions\Plugin;
+use publishing\contentsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
+use publishing\contentsubscriptions\services\SubscriptionsService;
 
 class SubscriptionsController extends Controller
 {
@@ -24,12 +23,12 @@ class SubscriptionsController extends Controller
      */
     public function actionValidate(string $hashValue)
     {
-        $template = 'mail-subscriptions/layouts/_message';
-        $message = \Craft::t('mail-subscriptions', 'Link not valid.');
+        $template = 'content-subscriptions/layouts/_message';
+        $message = \Craft::t('content-subscriptions', 'Link not valid.');
 
         if (Plugin::getInstance()->subscriptionsService->validateSubscription($hashValue)) {
-            //return $this->renderTemplate('mail-subscriptions/subscriptions/_new');
-            $message = \Craft::t('mail-subscriptions', 'E-Mail successfully verified.');
+            //return $this->renderTemplate('content-subscriptions/subscriptions/_new');
+            $message = \Craft::t('content-subscriptions', 'E-Mail successfully verified.');
         }
 
         if ($this->view->doesTemplateExist($template, $this->view::TEMPLATE_MODE_CP)) {
@@ -42,8 +41,8 @@ class SubscriptionsController extends Controller
 
     public function actionUnsubscribe(string $hashValue)
     {
-        $template = 'mail-subscriptions/layouts/_message';
-        $message = \Craft::t('mail-subscriptions', 'Link not valid.');
+        $template = 'content-subscriptions/layouts/_message';
+        $message = \Craft::t('content-subscriptions', 'Link not valid.');
 
         $subscription = Plugin::getInstance()->subscriptionsService->getSubscriptionByHash($hashValue);
         if ($subscription) {
@@ -69,7 +68,7 @@ class SubscriptionsController extends Controller
 
     public function actionCreateSubscription()
     {
-        return $this->renderTemplate('mail-subscriptions/subscriptions/_new');
+        return $this->renderTemplate('content-subscriptions/subscriptions/_new');
     }
 
     public function actionEditSubscription(int $id)
@@ -79,11 +78,11 @@ class SubscriptionsController extends Controller
             $subscription = Plugin::getInstance()->subscriptionsService->getSubscription($id);
 
             if ($subscription) {
-                return $this->renderTemplate('mail-subscriptions/subscriptions/_edit', ['subscription' => $subscription]);
+                return $this->renderTemplate('content-subscriptions/subscriptions/_edit', ['subscription' => $subscription]);
             }
         }
 
-        return $this->asFailure('mail-subscriptions/subscriptions');
+        return $this->asFailure('content-subscriptions/subscriptions');
     }
 
     public function actionSendVerificationMail($hashValue)
@@ -92,12 +91,12 @@ class SubscriptionsController extends Controller
            return '';
         }
         if (Plugin::getInstance()->notificationsService->initiateVerification($hashValue)) {
-            \Craft::$app->getSession()->setSuccess(\Craft::t('mail-subscriptions', 'Verification mail sent.'));
+            \Craft::$app->getSession()->setSuccess(\Craft::t('content-subscriptions', 'Verification mail sent.'));
         } else {
-            \Craft::$app->getSession()->setError(\Craft::t('mail-subscriptions', 'Verification mail couldn\'t be sent.'));
+            \Craft::$app->getSession()->setError(\Craft::t('content-subscriptions', 'Verification mail couldn\'t be sent.'));
         }
 
-        return $this->redirect('mail-subscriptions/subscriptions');
+        return $this->redirect('content-subscriptions/subscriptions');
     }
 
     //
@@ -126,11 +125,6 @@ class SubscriptionsController extends Controller
         // Trigger event on subscription
         if ($hashValue) {
             Plugin::getInstance()->notificationsService->initiateVerification($hashValue);
-
-            $event = new UserSubscribedEvent([
-                'subscriptionModel' => $subscriptionModel,
-            ]);
-            $this->trigger($subscriptionService::EVENT_USER_SUBSCRIBED, $event);
         }
 
         return $this->redirect($request->getFullPath());
@@ -158,7 +152,7 @@ class SubscriptionsController extends Controller
         $subscriptionModel->enabled = $request->getRequiredParam('enabled');
         (Plugin::getInstance()->subscriptionsService)->saveSubscription($subscriptionModel);
 
-        return $this->redirect('mail-subscriptions/subscriptions');
+        return $this->redirect('content-subscriptions/subscriptions');
     }
 
     public function actionUpdateSubscription()
@@ -176,7 +170,7 @@ class SubscriptionsController extends Controller
 
         Plugin::getInstance()->subscriptionsService->updateSubscription($subscriptionModel);
 
-        return $this->redirect('mail-subscriptions/subscriptions');
+        return $this->redirect('content-subscriptions/subscriptions');
     }
 
     public function actionDeleteSubscription(int $id)
@@ -187,6 +181,6 @@ class SubscriptionsController extends Controller
         $settingsServices = Plugin::getInstance()->subscriptionsService;
 
         $settingsServices->removeSubscription($id);
-        return $this->redirect('mail-subscriptions/subscriptions');
+        return $this->redirect('content-subscriptions/subscriptions');
     }
 }

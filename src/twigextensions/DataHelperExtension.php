@@ -1,9 +1,9 @@
 <?php
-namespace publishing\mailsubscriptions\twigextensions;
+namespace publishing\contentsubscriptions\twigextensions;
 
 use Craft;
-use publishing\mailsubscriptions\models\SubscriptionModel;
-use publishing\mailsubscriptions\Plugin;
+use publishing\contentsubscriptions\models\SubscriptionModel;
+use publishing\contentsubscriptions\Plugin;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -12,9 +12,9 @@ class DataHelperExtension extends AbstractExtension
     /**
      * @return string
      */
-    public function availableTags()
+/*    public function availableTags()
     {
-        $settings = Craft::$app->getPlugins()->getPlugin('mail-subscriptions')->getSettings();
+        $settings = Craft::$app->getPlugins()->getPlugin('content-subscriptions')->getSettings();
         $list = [];
         if ($settings) {
             foreach ($settings->tags as $tag) {
@@ -23,7 +23,7 @@ class DataHelperExtension extends AbstractExtension
         }
 
         return implode(', ', $list);
-    }
+    }*/
 
 /*    public function getSubscriptionForm()
     {
@@ -37,7 +37,6 @@ class DataHelperExtension extends AbstractExtension
     {
         return [
             new TwigFunction('availableTags', [$this, 'availableTags']),
-            new TwigFunction('getSubscriptionForm', [$this, 'getSubscriptionForm']),
         ];
     }
 }

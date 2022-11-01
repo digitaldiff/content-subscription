@@ -22,7 +22,7 @@ return [
     'Firstname' => 'Firstname',
     'Section Select' => 'Section Select',
     'sectionSelect' => 'sectionSelect',
-    'mail-subscriptions' => 'mail-subscriptions',
+    'content-subscriptions' => 'content-subscriptions',
     'Content Subscriptions' => 'Content Subscriptions',
     'An error occurred' => 'An error occurred',
     'Group deleted' => 'Group deleted',

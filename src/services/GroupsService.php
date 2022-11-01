@@ -1,16 +1,16 @@
 <?php
-namespace publishing\mailsubscriptions\services;
+namespace publishing\contentsubscriptions\services;
 
 use craft\elements\conditions\RelatedToConditionRule;
 use craft\errors\ElementNotFoundException;
 use craft\events\ModelEvent;
 use craft\helpers\Db;
 use craft\helpers\StringHelper;
-use publishing\mailsubscriptions\models\MailGroupModel;
-use publishing\mailsubscriptions\models\SubscriptionModel;
-use publishing\mailsubscriptions\Plugin;
-use publishing\mailsubscriptions\records\ContentSubscriptions_MailGroupRecord;
-use publishing\mailsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
+use publishing\contentsubscriptions\models\MailGroupModel;
+use publishing\contentsubscriptions\models\SubscriptionModel;
+use publishing\contentsubscriptions\Plugin;
+use publishing\contentsubscriptions\records\ContentSubscriptions_MailGroupRecord;
+use publishing\contentsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
 use yii\base\Component;
 use craft\helpers\App;
 use yii\debug\models\search\Mail;

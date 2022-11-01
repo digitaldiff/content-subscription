@@ -1,14 +1,14 @@
 <?php
-namespace publishing\mailsubscriptions\services;
+namespace publishing\contentsubscriptions\services;
 
 
 use craft\events\ModelEvent;
 use craft\helpers\App;
 use craft\helpers\UrlHelper;
 use craft\mail\Mailer;
-use publishing\mailsubscriptions\models\MailGroupModel;
-use publishing\mailsubscriptions\models\SubscriptionModel;
-use publishing\mailsubscriptions\Plugin;
+use publishing\contentsubscriptions\models\MailGroupModel;
+use publishing\contentsubscriptions\models\SubscriptionModel;
+use publishing\contentsubscriptions\Plugin;
 use yii\base\Component;
 
 
@@ -63,7 +63,7 @@ class NotificationsService extends Component
             $body = str_replace('##' . $key . '##', $subscription->$key, $body);
         }
 
-        $url = UrlHelper::actionUrl('mail-subscriptions/subscriptions/validate/?hashValue=' . $subscription->hashValue);
+        $url = UrlHelper::actionUrl('content-subscriptions/subscriptions/validate/?hashValue=' . $subscription->hashValue);
 
         $body = str_replace('##verificationLink##', $url, $body);
 
@@ -103,7 +103,7 @@ class NotificationsService extends Component
             }
 
             if ($group->enableUnsubscribing) {
-                $url = UrlHelper::actionUrl('mail-subscriptions/subscriptions/unsubscribe/?hashValue=' . $subscription->hashValue);
+                $url = UrlHelper::actionUrl('content-subscriptions/subscriptions/unsubscribe/?hashValue=' . $subscription->hashValue);
 
                 $body = str_replace('##unsubscribeLink##', $url, $body);
             } else {
@@ -120,7 +120,7 @@ class NotificationsService extends Component
 
         \Craft::$app->getSession()->setNotice(
             \Craft::t(
-                'mail-subscriptions',
+                'content-subscriptions',
                 '{success} subscribers successfully notified, {failures} failures',
                 [
                     'success' => $count,

@@ -1,5 +1,5 @@
 <?php
-namespace publishing\mailsubscriptions\models;
+namespace publishing\contentsubscriptions\models;
 
 use craft\base\Model;
 

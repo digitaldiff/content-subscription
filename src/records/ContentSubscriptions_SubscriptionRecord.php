@@ -1,5 +1,5 @@
 <?php
-namespace publishing\mailsubscriptions\records;
+namespace publishing\contentsubscriptions\records;
 
 use craft\db\ActiveRecord;
 

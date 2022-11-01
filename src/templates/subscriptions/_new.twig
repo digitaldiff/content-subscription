@@ -5,30 +5,30 @@
 {% set title = 'New Subscription' %}
 {% set fullPageForm = true %}
 {% set selectedSubnavItem = 'subscriptions' %}
-{% set groups = craft.mailSubscriptions.getMailGroupLabels %}
+{% set groups = craft.contentSubscriptions.getMailGroupLabels %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
-    { label: 'Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions/subscriptions') },
-    { label: 'New' | t('mail-subscriptions'), url: url('mail-subscriptions/subscriptions/new') },
+    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: 'Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions/subscriptions') },
+    { label: 'New' | t('content-subscriptions'), url: url('content-subscriptions/subscriptions/new') },
 ] %}
 
 {% block content %}
 
 {{ forms.hidden({
     name: 'action',
-    value: 'mail-subscriptions/subscriptions/save-subscription'
+    value: 'content-subscriptions/subscriptions/save-subscription'
 }) }}
 
-{% include 'mail-subscriptions/_includes/subscriptionFormFields' with { 'subscription': ''} %}
+{% include 'content-subscriptions/_includes/subscriptionFormFields' with { 'subscription': ''} %}
 
 {% endblock %}
 
 {% block details %}
     <div id="settings" class="meta">
-        {% include 'mail-subscriptions/_includes/_sidebar' with {'element': ''} %}
+        {% include 'content-subscriptions/_includes/_sidebar' with {'element': ''} %}
         {{ forms.lightSwitchField({
-            label: 'Mail verified'|t('mail-subscriptions'),
+            label: 'Mail verified'|t('content-subscriptions'),
             name: 'verificationStatus',
             on: false
         }) }}

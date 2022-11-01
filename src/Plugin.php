@@ -1,5 +1,5 @@
 <?php
-namespace publishing\mailsubscriptions;
+namespace publishing\contentsubscriptions;
 
 use Craft;
 use craft\base\Model;
@@ -9,12 +9,11 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\web\twig\variables\Cp;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
-use publishing\mailsubscriptions\models\SettingsModel;
-use publishing\mailsubscriptions\services\GroupsService;
-use publishing\mailsubscriptions\services\NotificationsService;
-use publishing\mailsubscriptions\services\SubscriptionsService;
-use publishing\mailsubscriptions\twigextensions\DataHelperExtension;
-use publishing\mailsubscriptions\variables\MailSubscriptionsVariable;
+use publishing\contentsubscriptions\services\GroupsService;
+use publishing\contentsubscriptions\services\NotificationsService;
+use publishing\contentsubscriptions\services\SubscriptionsService;
+use publishing\contentsubscriptions\twigextensions\DataHelperExtension;
+use publishing\contentsubscriptions\variables\ContentSubscriptionsVariable;
 use yii\base\Event;
 use craft\elements\Entry;
 use craft\events\ModelEvent;
@@ -43,10 +42,6 @@ class Plugin extends \craft\base\Plugin
 
     protected function setup(): void
     {
-        /** @var SettingsModel $settings */
-        $settings = $this->getSettings();
-        /*$this->hasCpSection = $settings->pluginEnabled;*/
-
         // Register Services
         $this->setComponents([
             'groupsService' => GroupsService::class,
@@ -62,13 +57,13 @@ class Plugin extends \craft\base\Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             static function(RegisterUrlRulesEvent $event) {
                 // Field Layouts
-                $event->rules['mail-subscriptions/groups/new'] = 'mail-subscriptions/groups/create-mail-group';
-                $event->rules['mail-subscriptions/groups/edit/<id:\d+>'] = 'mail-subscriptions/groups/edit-mail-group';
-                $event->rules['mail-subscriptions/groups/delete/<id:\d+>'] = 'mail-subscriptions/groups/delete-mail-group';
-                $event->rules['mail-subscriptions/subscriptions/new'] = 'mail-subscriptions/subscriptions/create-subscription';
-                $event->rules['mail-subscriptions/subscriptions/edit/<id:\d+>'] = 'mail-subscriptions/subscriptions/edit-subscription';
-                $event->rules['mail-subscriptions/subscriptions/delete/<id:\d+>'] = 'mail-subscriptions/subscriptions/delete-subscription';
-                $event->rules['mail-subscriptions/subscriptions/sendVerificationMail/<hashValue:\w+>'] = 'mail-subscriptions/subscriptions/send-verification-mail';
+                $event->rules['content-subscriptions/groups/new'] = 'content-subscriptions/groups/create-mail-group';
+                $event->rules['content-subscriptions/groups/edit/<id:\d+>'] = 'content-subscriptions/groups/edit-mail-group';
+                $event->rules['content-subscriptions/groups/delete/<id:\d+>'] = 'content-subscriptions/groups/delete-mail-group';
+                $event->rules['content-subscriptions/subscriptions/new'] = 'content-subscriptions/subscriptions/create-subscription';
+                $event->rules['content-subscriptions/subscriptions/edit/<id:\d+>'] = 'content-subscriptions/subscriptions/edit-subscription';
+                $event->rules['content-subscriptions/subscriptions/delete/<id:\d+>'] = 'content-subscriptions/subscriptions/delete-subscription';
+                $event->rules['content-subscriptions/subscriptions/sendVerificationMail/<hashValue:\w+>'] = 'content-subscriptions/subscriptions/send-verification-mail';
             }
         );
 
@@ -95,7 +90,7 @@ class Plugin extends \craft\base\Plugin
             CraftVariable::EVENT_INIT,
             function (Event $event) {
                 $variable = $event->sender;
-                $variable->set('mailSubscriptions', MailSubscriptionsVariable::class);
+                $variable->set('mailSubscriptions', ContentSubscriptionsVariable::class);
             }
         );
 
@@ -106,7 +101,7 @@ class Plugin extends \craft\base\Plugin
             Entry::class,
             Entry::EVENT_DEFINE_SIDEBAR_HTML,
             static function (DefineHtmlEvent $event) {
-                $html =  Craft::$app->view->renderTemplate('mail-subscriptions/_field/lightswitch');
+                $html =  Craft::$app->view->renderTemplate('content-subscriptions/_field/sendNotificationLightswitch');
                 $event->html .= $html;
             }
         );
@@ -127,37 +122,32 @@ class Plugin extends \craft\base\Plugin
     {
         $nav = parent::getCpNavItem();
 
-        $nav['label'] = \Craft::t('mail-subscriptions', 'Content Subscriptions');
-        $nav['url'] = 'mail-subscriptions';
+        $nav['label'] = \Craft::t('content-subscriptions', 'Content Subscriptions');
+        $nav['url'] = 'content-subscriptions';
 
         $nav['subnav']['groups'] = [
-            'label' => Craft::t('mail-subscriptions', 'Mail groups'),
-            'url' => 'mail-subscriptions/groups',
+            'label' => Craft::t('content-subscriptions', 'Mail groups'),
+            'url' => 'content-subscriptions/groups',
         ];
 
         $nav['subnav']['subscriptions'] = [
-            'label' => Craft::t('mail-subscriptions', 'Subscriptions'),
-            'url' => 'mail-subscriptions/subscriptions',
+            'label' => Craft::t('content-subscriptions', 'Subscriptions'),
+            'url' => 'content-subscriptions/subscriptions',
         ];
 
         /*$nav['subnav']['field-layouts'] = [
-            'label' => Craft::t('mail-subscriptions', 'Field Layouts'),
-            'url' => 'mail-subscriptions/field-layouts',
+            'label' => Craft::t('content-subscriptions', 'Field Layouts'),
+            'url' => 'content-subscriptions/field-layouts',
         ];*/
 
         if (Craft::$app->getUser()->getIsAdmin()) {
             $nav['subnav']['settings'] = [
-                'label' => Craft::t('mail-subscriptions', 'Settings'),
-                'url' => 'mail-subscriptions/settings',
+                'label' => Craft::t('content-subscriptions', 'Settings'),
+                'url' => 'content-subscriptions/settings',
             ];
         }
 
         return $nav;
-    }
-
-    protected function createSettingsModel(): ?Model
-    {
-        return new SettingsModel();
     }
 
     /**
@@ -169,7 +159,7 @@ class Plugin extends \craft\base\Plugin
      */
     protected function settingsHtml(): ?string
     {
-        return \Craft::$app->getView()->renderTemplate('mail-subscriptions/_settings', [
+        return \Craft::$app->getView()->renderTemplate('content-subscriptions/_settings', [
             'settings' => $this->getSettings()
         ]);
     }

@@ -7,9 +7,9 @@
 {% set fullPageForm = true %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
-    { label: 'Groups' | t('mail-subscriptions'), url: url('mail-subscriptions/groups') },
-    { label: group.groupName, url: url('mail-subscriptions/groups/edit/'  ~ group.id) },
+    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: 'Groups' | t('content-subscriptions'), url: url('content-subscriptions/groups') },
+    { label: group.groupName, url: url('content-subscriptions/groups/edit/'  ~ group.id) },
 ] %}
 
 {% set sections = craft.mailSubscriptions.getSections(true) %}
@@ -34,8 +34,8 @@
 } %}
 
 {% set navItems = {
-    'general-heading': { heading: "General"|t('mail-subscriptions') },
-    'settings': { title: "Settings"|t('mail-subscriptions') },
+    'general-heading': { heading: "General"|t('content-subscriptions') },
+    'settings': { title: "Settings"|t('content-subscriptions') },
 } %}
 
 {% block sidebar %}
@@ -48,7 +48,7 @@
                     </li>
                 {% else %}
                     <li>
-                        <a href="{{ url('mail-subscriptions/groups/edit/' ~ group.id) }}" class="sel">{{ element.title }}</a>
+                        <a href="{{ url('content-subscriptions/groups/edit/' ~ group.id) }}" class="sel">{{ element.title }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
@@ -62,7 +62,7 @@
 
     {{ forms.hidden({
         name: 'action',
-        value: 'mail-subscriptions/groups/update-mail-group'
+        value: 'content-subscriptions/groups/update-mail-group'
     }) }}
 
     {{ forms.hidden({
@@ -70,18 +70,18 @@
         value: group.id
     }) }}
 
-    {% include 'mail-subscriptions/groups/_includes/general' %}
-    {% include 'mail-subscriptions/groups/_includes/mail' %}
-    {% include 'mail-subscriptions/groups/_includes/opt-in' %}
-    {% include 'mail-subscriptions/groups/_includes/unsubscribe' %}
+    {% include 'content-subscriptions/groups/_includes/general' %}
+    {% include 'content-subscriptions/groups/_includes/mail' %}
+    {% include 'content-subscriptions/groups/_includes/opt-in' %}
+    {% include 'content-subscriptions/groups/_includes/unsubscribe' %}
 
 {% endblock %}
 
 {% block details %}
     <div id="settings" class="meta">
-        {% include 'mail-subscriptions/_includes/_sidebar'  with {'element': group }%}
+        {% include 'content-subscriptions/_includes/_sidebar'  with {'element': group }%}
         {{ forms.lightSwitchField({
-            label: 'Allow unsubscribing'|t('mail-subscriptions'),
+            label: 'Allow unsubscribing'|t('content-subscriptions'),
             name: 'enableUnsubscribing',
             on: group.enableUnsubscribing
         }) }}

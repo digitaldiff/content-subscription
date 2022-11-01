@@ -2,14 +2,16 @@
 
 <div id="mail" class="hidden">
     {{ forms.textField({
-        label: 'Mail subject'|t('mail-subscriptions'),
+        label: 'Mail subject'|t('content-subscriptions'),
         name: 'emailSubject',
+        required: true,
         value: (group) ? group.emailSubject : ''
     }) }}
 
     {{ forms.textAreaField({
-        label: 'Mail Message'|t('mail-subscriptions'),
+        label: 'Mail Message'|t('content-subscriptions'),
         name: 'emailMessage',
+        required: true,
         value: (group) ? group.emailBody : '',
         rows: 8
     }) }}

@@ -2,16 +2,18 @@
 
 <div id="general">
     {{ forms.selectField({
-        label: 'Section'|t('mail-subscriptions'),
+        label: 'Section'|t('content-subscriptions'),
         name: 'section',
         value: (group) ? group.sectionId : '',
         options: sections,
+        required: true,
         first: true,
     }) }}
 
     {{ forms.textField({
-        label: 'Group name'|t('mail-subscriptions'),
-    name: 'groupName',
-    value: (group) ? group.groupName : ''
+        label: 'Group name'|t('content-subscriptions'),
+        name: 'groupName',
+        required: true,
+        value: (group) ? group.groupName : ''
     }) }}
 </div>

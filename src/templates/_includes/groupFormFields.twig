@@ -1,7 +1,7 @@
 {% import '_includes/forms' as forms %}
 
     {{ forms.selectField({
-        label: 'Section'|t('mail-subscriptions'),
+        label: 'Section'|t('content-subscriptions'),
         name: 'section',
         value: (group) ? group.sectionId : '',
         options: sections,
@@ -9,19 +9,19 @@
     }) }}
 
     {{ forms.textField({
-        label: 'Group name'|t('mail-subscriptions'),
+        label: 'Group name'|t('content-subscriptions'),
         name: 'groupName',
         value: (group) ? group.groupName : ''
     }) }}
 
     {{ forms.textField({
-        label: 'Mail subject'|t('mail-subscriptions'),
+        label: 'Mail subject'|t('content-subscriptions'),
         name: 'emailSubject',
         value: (group) ? group.emailSubject : ''
     }) }}
 
     {{ forms.textAreaField({
-        label: 'Mail Message'|t('mail-subscriptions'),
+        label: 'Mail Message'|t('content-subscriptions'),
         name: 'emailMessage',
         value: (group) ? group.emailBody : '',
         rows: 8

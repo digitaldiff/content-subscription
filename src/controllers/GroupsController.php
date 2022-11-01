@@ -1,13 +1,12 @@
 <?php
-namespace publishing\mailsubscriptions\controllers;
+namespace publishing\contentsubscriptions\controllers;
 
 use craft\test\mockclasses\ToString;
 use craft\web\Controller;
-use publishing\mailsubscriptions\models\MailGroupModel;
-use publishing\mailsubscriptions\models\SettingsModel;
-use publishing\mailsubscriptions\models\SubscriptionModel;
-use publishing\mailsubscriptions\Plugin;
-use publishing\mailsubscriptions\services\GroupsService;
+use publishing\contentsubscriptions\models\MailGroupModel;
+use publishing\contentsubscriptions\models\SubscriptionModel;
+use publishing\contentsubscriptions\Plugin;
+use publishing\contentsubscriptions\services\GroupsService;
 use yii\web\Response;
 
 class GroupsController extends Controller
@@ -18,7 +17,7 @@ class GroupsController extends Controller
 
     public function actionCreateMailGroup(): Response
     {
-        return $this->renderTemplate('mail-subscriptions/groups/_new');
+        return $this->renderTemplate('content-subscriptions/groups/_new');
     }
 
     public function actionEditMailGroup(int $id): Response
@@ -28,11 +27,11 @@ class GroupsController extends Controller
             $group = Plugin::getInstance()->groupsService->getMailGroup($id);
 
             if ($group) {
-                return $this->renderTemplate('mail-subscriptions/groups/_edit', ['group' => $group]);
+                return $this->renderTemplate('content-subscriptions/groups/_edit', ['group' => $group]);
             }
         }
 
-        return $this->asFailure('mail-subscriptions/groups');
+        return $this->asFailure('content-subscriptions/groups');
     }
 
     //
@@ -51,7 +50,7 @@ class GroupsController extends Controller
 
         $subscriptionsService->saveMailGroup($groupModel);
 
-        return $this->redirect('mail-subscriptions/groups');
+        return $this->redirect('content-subscriptions/groups');
     }
 
     public function actionUpdateMailGroup()
@@ -66,7 +65,7 @@ class GroupsController extends Controller
 
         $subscriptionsService->updateMailGroup($groupModel);
 
-        return $this->redirect('mail-subscriptions/groups');
+        return $this->redirect('content-subscriptions/groups');
     }
 
     public function actionDeleteMailGroup($id): Response
@@ -76,13 +75,13 @@ class GroupsController extends Controller
             $success = Plugin::getInstance()->groupsService->removeGroup($id);
 
             if ($success) {
-                \Craft::$app->getSession()->setSuccess(\Craft::t('mail-subscriptions', 'Group deleted'));
-                return $this->redirect('mail-subscriptions/groups/');
+                \Craft::$app->getSession()->setSuccess(\Craft::t('content-subscriptions', 'Group deleted'));
+                return $this->redirect('content-subscriptions/groups/');
             }
         }
-        \Craft::$app->getSession()->setError(\Craft::t('mail-subscriptions', 'An error occurred'));
+        \Craft::$app->getSession()->setError(\Craft::t('content-subscriptions', 'An error occurred'));
 
-        return $this->redirect('mail-subscriptions/groups/');
+        return $this->redirect('content-subscriptions/groups/');
     }
 
     /**

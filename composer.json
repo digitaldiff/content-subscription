@@ -19,11 +19,11 @@
   "keywords": ["craft", "mail", "subscription"],
   "autoload": {
     "psr-4": {
-      "publishing\\mailsubscriptions\\": "src/"
+      "publishing\\contentsubscriptions\\": "src/"
     }
   },
   "extra": {
-    "name": "Mail Subscriptions",
-    "handle": "mail-subscriptions"
+    "name": "Content Subscriptions",
+    "handle": "content-subscriptions"
   }
 }

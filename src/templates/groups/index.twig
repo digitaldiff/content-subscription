@@ -9,8 +9,8 @@
 {% set sections = craft.mailSubscriptions.getSections(true) %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
-    { label: 'Groups' | t('mail-subscriptions'), url: url('mail-subscriptions/groups') },
+    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: 'Groups' | t('content-subscriptions'), url: url('content-subscriptions/groups') },
 ] %}
 
 {% block headertitle %}
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block actionButton %}
-    <a href="{{ cpUrl('mail-subscriptions/groups/new') }}" class="btn submit add icon">{{ 'New Group'|t('mail-subscriptions') }}</a>
+    <a href="{{ cpUrl('content-subscriptions/groups/new') }}" class="btn submit add icon">{{ 'New Group'|t('content-subscriptions') }}</a>
 {% endblock %}
 
 {% block contextMenu %}
@@ -35,9 +35,9 @@
                     {# TODO date edited #}
                     {# TODO date created #}
                     {# TODO provide unsubscribing-option #}
-                    {#<th scope="col">{{ 'Group ID' |t('mail-subscriptions') }}</th>#}
-                    <th scope="col">{{ 'Group Name' |t('mail-subscriptions') }}</th>
-                    <th scope="col">{{ 'Section' |t('mail-subscriptions') }}</th>
+                    {#<th scope="col">{{ 'Group ID' |t('content-subscriptions') }}</th>#}
+                    <th scope="col">{{ 'Group Name' |t('content-subscriptions') }}</th>
+                    <th scope="col">{{ 'Section' |t('content-subscriptions') }}</th>
                     <th class="col"></th>
                     <th class="thin"></th>
                     <th class="thin"></th>
@@ -48,19 +48,19 @@
                     <tbody>
                     <tr class="s-{{ group.sectionId }}">
                        {# <td>{{ group.id }}</td>#}
-                        <td><a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
+                        <td><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
                         <td>{{ sections[group.sectionId] }}</td>
                         {# <td>
-                                <a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}">{{ 'Edit'|t('mail-subscriptions') }}</a>
+                                <a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}">{{ 'Edit'|t('content-subscriptions') }}</a>
                                 {% if currentUser.can('formie-createForms') %}
-                                    <a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}">{{ 'Delete'|t('mail-subscriptions') }}</a>
+                                    <a href="{{ cpUrl('content-subscriptions/groups/delete/' ~ group.id) }}">{{ 'Delete'|t('content-subscriptions') }}</a>
                                 {% endif %}
                             </td>#}
                         {# TODO fix text #}
                         <td><p class="code copytextbtn" onclick="navigator.clipboard.writeText('\{\{ craft.mailSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');">{{ '\{\{ craft.mailSubscriptions.getSubscriptionForm(' ~ group.id ~ ') \}\}' }}</p></td>
                         <td><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.mailSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
-                        <td><a href="{{ cpUrl('mail-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
-                        <td><a href="{{ cpUrl('mail-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+                        <td><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
+                        <td><a href="{{ cpUrl('content-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
                     </tr>
                     </tbody>
                 {% endfor %}
@@ -77,7 +77,7 @@
 
             {{ forms.hidden({
                 name: 'action',
-                value: 'mail-subscriptions/settings/save-mail-group'
+                value: 'content-subscriptions/settings/save-mail-group'
             }) }}
 
             {{ forms.textAreaField({
@@ -102,7 +102,7 @@
 
             {{ forms.hidden({
                 name: 'action',
-                value: 'mail-subscriptions/settings/save-subscription'
+                value: 'content-subscriptions/settings/save-subscription'
             }) }}
 
             {{ forms.textField({

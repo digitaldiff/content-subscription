@@ -1,7 +1,7 @@
 {% import '_includes/forms' as forms %}
 
     {{ forms.selectField({
-        label: 'Group'|t('mail-subscriptions'),
+        label: 'Group'|t('content-subscriptions'),
         name: 'groupId',
         value: (subscription) ? subscription.groupId : '',
         options: groups,
@@ -9,19 +9,19 @@
     }) }}
 
     {{ forms.textField({
-        label: 'Firstname'|t('mail-subscriptions'),
+        label: 'Firstname'|t('content-subscriptions'),
         name: 'firstName',
         value: (subscription) ? subscription.firstName : ''
     }) }}
 
     {{ forms.textField({
-        label: 'Lastname'|t('mail-subscriptions'),
+        label: 'Lastname'|t('content-subscriptions'),
         name: 'lastName',
         value: (subscription) ? subscription.lastName : ''
     }) }}
 
     {{ forms.textField({
-        label: 'Email'|t('mail-subscriptions'),
+        label: 'Email'|t('content-subscriptions'),
         name: 'email',
         value: (subscription) ? subscription.email : ''
     }) }}

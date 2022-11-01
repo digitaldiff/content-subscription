@@ -2,14 +2,16 @@
 
 <div id="opt-in" class="hidden">
     {{ forms.textField({
-        label: 'Opt-In confirmation mail subject'|t('mail-subscriptions'),
+        label: 'Opt-In confirmation mail subject'|t('content-subscriptions'),
         name: 'optInSubject',
+        required: true,
         value: (group) ? group.optInSubject : ''
     }) }}
 
     {{ forms.textAreaField({
-        label: 'Opt-In confirmation mail message'|t('mail-subscriptions'),
+        label: 'Opt-In confirmation mail message'|t('content-subscriptions'),
         name: 'optInBody',
+        required: true,
         value: (group) ? group.optInBody : '',
         rows: 8
     }) }}

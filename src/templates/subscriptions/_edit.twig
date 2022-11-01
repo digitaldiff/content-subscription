@@ -5,19 +5,19 @@
 {% set title = 'Edit Subscription' %}
 {% set fullPageForm = true %}
 {% set selectedSubnavItem = 'subscriptions' %}
-{% set groups = craft.mailSubscriptions.getMailGroupLabels %}
+{% set groups = craft.contentSubscriptions.getMailGroupLabels %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions') },
-    { label: 'Subscriptions' | t('mail-subscriptions'), url: url('mail-subscriptions/subscriptions') },
-    { label: subscription.email, url: url('mail-subscriptions/subscriptions/edit/'  ~ subscription.id) },
+    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: 'Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions/subscriptions') },
+    { label: subscription.email, url: url('content-subscriptions/subscriptions/edit/'  ~ subscription.id) },
 ] %}
 
 {% block content %}
 
     {{ forms.hidden({
         name: 'action',
-        value: 'mail-subscriptions/subscriptions/update-subscription'
+        value: 'content-subscriptions/subscriptions/update-subscription'
     }) }}
 
     {{ forms.hidden({
@@ -25,20 +25,20 @@
         value: subscription.id
     }) }}
 
-    {% include 'mail-subscriptions/_includes/subscriptionFormFields' %}
+    {% include 'content-subscriptions/_includes/subscriptionFormFields' %}
 
 {% endblock %}
 
 {% block details %}
     <div id="settings" class="meta">
-        {% include 'mail-subscriptions/_includes/_sidebar' with {'element': subscription} %}
+        {% include 'content-subscriptions/_includes/_sidebar' with {'element': subscription} %}
         {{ forms.lightSwitchField({
-            label: 'Mail verified'|t('mail-subscriptions'),
+            label: 'Mail verified'|t('content-subscriptions'),
             name: 'verificationStatus',
             on: subscription.verificationStatus
         }) }}
         <div class="field">
-            <a href="{{ cpUrl('mail-subscriptions/subscriptions/sendVerificationMail/' ~ subscription.hashValue) }}">{{ 'Resend verification mail'|t('mail-subscriptions') }}</a>
+            <a href="{{ cpUrl('content-subscriptions/subscriptions/sendVerificationMail/' ~ subscription.hashValue) }}">{{ 'Resend verification mail'|t('content-subscriptions') }}</a>
         </div>
     </div>
 {% endblock %}

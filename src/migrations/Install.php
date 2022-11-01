@@ -1,10 +1,10 @@
 <?php
-namespace publishing\mailsubscriptions\migrations;
+namespace publishing\contentsubscriptions\migrations;
 
 use Craft;
 use craft\db\Migration;
-use publishing\mailsubscriptions\records\ContentSubscriptions_MailGroupRecord;
-use publishing\mailsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
+use publishing\contentsubscriptions\records\ContentSubscriptions_MailGroupRecord;
+use publishing\contentsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
 
 /**
  * Install migration.

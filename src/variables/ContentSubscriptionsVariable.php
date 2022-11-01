@@ -1,16 +1,16 @@
 <?php
-namespace publishing\mailsubscriptions\variables;
+namespace publishing\contentsubscriptions\variables;
 
 use craft\helpers\Template as TemplateHelper;
 use craft\web\View;
-use publishing\mailsubscriptions\models\MailGroupModel;
-use publishing\mailsubscriptions\models\SubscriptionModel;
-use publishing\mailsubscriptions\Plugin;
+use publishing\contentsubscriptions\models\MailGroupModel;
+use publishing\contentsubscriptions\models\SubscriptionModel;
+use publishing\contentsubscriptions\Plugin;
 use function Psy\debug;
 
-class MailSubscriptionsVariable
+class ContentSubscriptionsVariable
 {
-    public function getMailGroups($id = 0)
+    public function getMailGroups($id = 0): array
     {
         return Plugin::getInstance()->groupsService->getMailGroups($id);
     }
@@ -18,11 +18,6 @@ class MailSubscriptionsVariable
     public function getSubscriptions(): array
     {
         return Plugin::getInstance()->subscriptionsService->getSubscriptions();
-    }
-
-    public function removeGroup($id): bool
-    {
-        return Plugin::getInstance()->groupsService->removeGroup($id);
     }
 
     public function getSections(): array
@@ -35,7 +30,7 @@ class MailSubscriptionsVariable
         return $result;
     }
 
-    public function getMailGroupLabels()
+    public function getMailGroupLabels(): array
     {
         $result = [];
         /** @var MailGroupModel[] $groups */
@@ -61,7 +56,7 @@ class MailSubscriptionsVariable
     {
         $view = \Craft::$app->getView();
 
-        $templatePath = 'mail-subscriptions/_forms/subscription-form.twig';
+        $templatePath = 'content-subscriptions/_forms/subscription-form.twig';
 
         $fields = (new SubscriptionModel())->getFormProperties($id);
 
