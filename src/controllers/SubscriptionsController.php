@@ -6,10 +6,12 @@ use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use craft\helpers\Template as TemplateHelper;
 use craft\web\Application;
 use craft\web\Controller;
+use Exception;
 use publishing\contentsubscriptions\models\SubscriptionModel;
 use publishing\contentsubscriptions\Plugin;
 use publishing\contentsubscriptions\records\ContentSubscriptions_SubscriptionRecord;
 use publishing\contentsubscriptions\services\SubscriptionsService;
+use yii\web\HttpException;
 
 class SubscriptionsController extends Controller
 {
@@ -23,7 +25,7 @@ class SubscriptionsController extends Controller
      */
     public function actionValidate(string $hashValue)
     {
-        $template = 'content-subscriptions/layouts/_message';
+        $template = 'content-subscriptions/_layouts/message';
         $message = \Craft::t('content-subscriptions', 'Link not valid.');
 
         if (Plugin::getInstance()->subscriptionsService->validateSubscription($hashValue)) {
@@ -41,7 +43,7 @@ class SubscriptionsController extends Controller
 
     public function actionUnsubscribe(string $hashValue)
     {
-        $template = 'content-subscriptions/layouts/_message';
+        $template = 'content-subscriptions/_layouts/message';
         $message = \Craft::t('content-subscriptions', 'Link not valid.');
 
         $subscription = Plugin::getInstance()->subscriptionsService->getSubscriptionByHash($hashValue);
@@ -58,14 +60,9 @@ class SubscriptionsController extends Controller
         }
     }
 
-    public function actionTest()
-    {
-        dd('hello');
-    }
     //
     //  CP Form loads
     //
-
     public function actionCreateSubscription()
     {
         return $this->renderTemplate('content-subscriptions/subscriptions/_new');
@@ -114,6 +111,8 @@ class SubscriptionsController extends Controller
         $subscriptionModel->lastName = $request->getRequiredParam('lastName');
         $subscriptionModel->email = $request->getRequiredParam('email');
 
+        $returnUrl = $request->getRequiredParam('returnUrl') !== '' ? $request->getRequiredParam('returnUrl') :$request->getFullPath();
+
         $subscriptionModel->verificationStatus = false;
         $subscriptionModel->enabled = true;
 
@@ -122,12 +121,11 @@ class SubscriptionsController extends Controller
         $subscriptionService = Plugin::getInstance()->subscriptionsService;
         $hashValue = $subscriptionService->saveSubscription($subscriptionModel);
 
-        // Trigger event on subscription
         if ($hashValue) {
             Plugin::getInstance()->notificationsService->initiateVerification($hashValue);
         }
 
-        return $this->redirect($request->getFullPath());
+        return $this->redirect($returnUrl. '?s=1');
     }
 
     //

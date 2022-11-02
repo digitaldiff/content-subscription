@@ -1,12 +1,19 @@
 {# TODO make spam-proof #}
-<form>
+
+{% if craft.app.request.getParam('s') %}
+    <p>{{ 'Registration successful. You will receive a confirmation email from us shortly.'|t}}</p>
+{% else %}
+<form class="{{ formClass }}">
     <input type="hidden" name="action" value="content-subscriptions/subscriptions/subscribe-to-group">
-    <input type="hidden" name="groupId" value="{{ id }}"
+    <input type="hidden" name="groupId" value="{{ id }}">
+    <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
     {% for field, type in fieldTypes %}
         {% if (type == 'string') %}
-            <label for="#{{ field }}">{{ field|t('content-subscriptions') }}</label>
+            <label for="#{{ field }}">{{ field|t() }}</label>
             <input id="#{{ field }}" name="{{ field }}" {{ (field == 'email') ? 'type=' ~ field : '' }} required />
         {% endif %}
     {% endfor %}
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary {{ btnClass }}">{{ btnValue }}</button>
 </form>
+
+{% endif %}

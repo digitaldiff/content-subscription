@@ -6,7 +6,6 @@ use craft\web\View;
 use publishing\contentsubscriptions\models\MailGroupModel;
 use publishing\contentsubscriptions\models\SubscriptionModel;
 use publishing\contentsubscriptions\Plugin;
-use function Psy\debug;
 
 class ContentSubscriptionsVariable
 {
@@ -52,13 +51,18 @@ class ContentSubscriptionsVariable
      *
      * Render a form element to enable site visitors to sign up for the mail subscription
      */
-    public function getSubscriptionForm($id)
+    public function getSubscriptionForm($param)
     {
         $view = \Craft::$app->getView();
 
         $templatePath = 'content-subscriptions/_forms/subscription-form.twig';
 
-        $fields = (new SubscriptionModel())->getFormProperties($id);
+        $fields = (new SubscriptionModel())->getFormProperties($param['groupId']);
+
+        $fields['returnUrl'] = $param['returnUrl'] ?? '';
+        $fields['btnValue'] = $param['btnValue'] ?? '';
+        $fields['btnClass'] = $param['btnClass'] ?? '';
+        $fields['formClass'] = $param['formClass'] ?? '';
 
         if ($view->doesTemplateExist($templatePath, View::TEMPLATE_MODE_CP)) {
             $html = $view->renderTemplate($templatePath, $fields, View::TEMPLATE_MODE_CP);

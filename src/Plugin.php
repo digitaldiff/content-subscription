@@ -6,6 +6,7 @@ use craft\base\Model;
 use craft\events\DefineHtmlEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\helpers\ElementHelper;
 use craft\web\twig\variables\Cp;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
@@ -74,8 +75,13 @@ class Plugin extends \craft\base\Plugin
             Entry::class,
             Entry::EVENT_AFTER_SAVE,
             function (ModelEvent $event) {
+                /** @var Entry $entry */
+                $entry = $event->sender;
+                $flag = \Craft::$app->getRequest()->getParam('content-subscription');
+
                 if (
-                    $_POST['content-subscription']
+                    //!($event->sender->duplicateOf && $event->sender->getIsCanonical() && !$event->sender->updatingFromDerivative) && $_POST['content-subscription']
+                    isset($flag) && $flag && !ElementHelper::isDraftOrRevision($entry)
                 ) {
                     $this->notificationsService->notificationEvent($event);
                 }
@@ -90,7 +96,7 @@ class Plugin extends \craft\base\Plugin
             CraftVariable::EVENT_INIT,
             function (Event $event) {
                 $variable = $event->sender;
-                $variable->set('mailSubscriptions', ContentSubscriptionsVariable::class);
+                $variable->set('contentSubscriptions', ContentSubscriptionsVariable::class);
             }
         );
 

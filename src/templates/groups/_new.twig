@@ -6,7 +6,7 @@
 {% set selectedSubnavItem = 'groups' %}
 {% set fullPageForm = true %}
 
-{% set sections = craft.mailSubscriptions.getSections(true) %}
+{% set sections = craft.contentSubscriptions.getSections(true) %}
 
 {% set crumbs = [
     { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },

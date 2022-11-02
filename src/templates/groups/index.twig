@@ -5,8 +5,8 @@
 {% set title = 'Mail Groups' %}
 {% set selectedSubnavItem = 'groups' %}
 
-{% set mailGroups = craft.mailSubscriptions.getMailGroups() %}
-{% set sections = craft.mailSubscriptions.getSections(true) %}
+{% set mailGroups = craft.contentSubscriptions.getMailGroups() %}
+{% set sections = craft.contentSubscriptions.getSections(true) %}
 
 {% set crumbs = [
     { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
@@ -57,8 +57,8 @@
                                 {% endif %}
                             </td>#}
                         {# TODO fix text #}
-                        <td><p class="code copytextbtn" onclick="navigator.clipboard.writeText('\{\{ craft.mailSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');">{{ '\{\{ craft.mailSubscriptions.getSubscriptionForm(' ~ group.id ~ ') \}\}' }}</p></td>
-                        <td><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.mailSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
+                        <td><p class="code copytextbtn" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');">{{ '\{\{ craft.contentSubscriptions.getSubscriptionForm(' ~ group.id ~ ') \}\}' }}</p></td>
+                        <td><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
                         <td><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
                         <td><a href="{{ cpUrl('content-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
                     </tr>
@@ -66,7 +66,13 @@
                 {% endfor %}
             </table>
         </div>
+        {% else %}
+        <div>
+            <p>{{ 'No groups exist yet.'|t('content-subscriptions') }}</p>
+        </div>
     {% endif %}
+
+
 
     {#{% set text = 'Enter a message. Available tags: ' ~ availableTags() %}#}
     {#
@@ -126,7 +132,7 @@
                 name: 'submit',
             }) }}
         </form>
-        <p>Subs: {{ mailSubscriptions | length}}</p>
+        <p>Subs: {{ contentSubscriptions | length}}</p>
     </div>
     <script>
         removeSubscription = function(e) {

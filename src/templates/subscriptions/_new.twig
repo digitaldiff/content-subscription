@@ -3,9 +3,13 @@
 {% import '_includes/forms' as forms %}
 
 {% set title = 'New Subscription' %}
-{% set fullPageForm = true %}
+
 {% set selectedSubnavItem = 'subscriptions' %}
 {% set groups = craft.contentSubscriptions.getMailGroupLabels %}
+
+{% if (groups|length > 0) %}
+    {% set fullPageForm = true %}
+{% endif %}
 
 {% set crumbs = [
     { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
@@ -14,23 +18,31 @@
 ] %}
 
 {% block content %}
+    {% if (groups|length > 0) %}
+        {{ forms.hidden({
+            name: 'action',
+            value: 'content-subscriptions/subscriptions/save-subscription'
+        }) }}
 
-{{ forms.hidden({
-    name: 'action',
-    value: 'content-subscriptions/subscriptions/save-subscription'
-}) }}
+        {% include 'content-subscriptions/_includes/subscriptionFormFields' with { 'subscription': ''} %}
 
-{% include 'content-subscriptions/_includes/subscriptionFormFields' with { 'subscription': ''} %}
-
+    {% else %}
+        <div>
+            <p>{{ 'Please create a group first'|t('content-subscriptions') }}</p>
+            <a href="{{ cpUrl('content-subscriptions/groups/new') }}" class="btn submit add icon">{{ 'New Group'|t('content-subscriptions') }}</a>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block details %}
-    <div id="settings" class="meta">
-        {% include 'content-subscriptions/_includes/_sidebar' with {'element': ''} %}
-        {{ forms.lightSwitchField({
-            label: 'Mail verified'|t('content-subscriptions'),
-            name: 'verificationStatus',
-            on: false
-        }) }}
-    </div>
+    {% if (groups|length > 0) %}
+        <div id="settings" class="meta">
+            {% include 'content-subscriptions/_includes/_sidebar' with {'element': ''} %}
+            {{ forms.lightSwitchField({
+                label: 'Mail verified'|t('content-subscriptions'),
+                name: 'verificationStatus',
+                on: false
+            }) }}
+        </div>
+    {% endif %}
 {% endblock %}

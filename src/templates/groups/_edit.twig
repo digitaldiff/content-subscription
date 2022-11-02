@@ -12,7 +12,7 @@
     { label: group.groupName, url: url('content-subscriptions/groups/edit/'  ~ group.id) },
 ] %}
 
-{% set sections = craft.mailSubscriptions.getSections(true) %}
+{% set sections = craft.contentSubscriptions.getSections(true) %}
 
 {% set tabs = {
     general: {

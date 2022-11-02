@@ -1,0 +1,27 @@
+{% extends "_layouts/base" %}
+
+{% set title = 'Verification'|t('mail-subscripitions') %}
+
+{% block body %}
+    <div class="message-container">
+        <p><b>{{ title }}</b></p>
+        <p>{{ message }}</p>
+    </div>
+
+{% endblock %}
+
+
+
+{% block foot %}
+    <style>
+        body { font-family: Arial, sans-serif; height: 100vh; background: #e4edf6; display: flex; justify-content: center; align-items: center; }
+
+        .message-container {
+            box-shadow: 0 25px 100px rgb(31 41 51 / 50%);
+            padding: 25px;
+            background: white;
+            border-radius: 5px;
+            width: 320px;
+        }
+    </style>
+{% endblock %}
