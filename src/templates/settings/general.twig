@@ -1,0 +1,23 @@
+{% extends 'content-subscriptions/_layouts/settings' %}
+
+{% import '_includes/forms' as forms %}
+
+{% set title = 'Settings' %}
+{% set selectedSubnavItem = 'settings' %}
+
+{% set fullPageForm = true %}
+
+{% block content %}
+    <input type="hidden" name="action" value="plugins/save-plugin-settings">
+    <input type="hidden" name="pluginHandle" value="content-subscriptions">
+    {% namespace 'settings' %}
+        {{ forms.textField({
+            label: 'Plugin name'|t('content-subscriptions'),
+            name: 'pluginName',
+            value: settings.pluginName,
+            autofocus: true,
+            instructions: 'Plugin name to be shown to the users in the sidebar.'|t('content-subscriptions'),
+            first: true,
+        }) }}
+    {% endnamespace %}
+{% endblock %}

@@ -14,7 +14,7 @@
 {% set selectedSubnavItem = 'subscriptions' %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: craft.contentSubscriptions.getPluginName | t('content-subscriptions'), url: url('content-subscriptions') },
     { label: 'Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions/subscriptions') },
 ] %}
 
@@ -39,8 +39,9 @@
                         <th scope="col">{{ 'Firstname' |t('content-subscriptions') }}</th>
                         <th scope="col">{{ 'Lastname' |t('content-subscriptions') }}</th>
                         <th scope="col">{{ 'Email' |t('content-subscriptions') }}</th>
-                        {# TODO date created #}
-                        {# TODO double opt-in status #}
+                        <th scope="col">{{ 'Enabled' |t('content-subscriptions') }}</th>
+                        <th scope="col">{{ 'Verified' |t('content-subscriptions') }}</th>
+                        <th scope="col">{{ 'Date registered' |t('content-subscriptions') }}</th>
                         <th class="thin"></th>
                         <th class="thin"></th>
                     </tr>
@@ -52,6 +53,9 @@
                             <td>{{ subscription.firstName }}</td>
                             <td>{{ subscription.lastName }}</td>
                             <td>{{ subscription.email }}</td>
+                            <td>{{ subscription.enabled ? 'Yes'|t : 'No'|t }}</td>
+                            <td>{{ subscription.verificationStatus ? 'Yes'|t : 'No'|t }}</td>
+                            <td>{{ subscription.dateCreated|date('d.m.Y') }}</td>
                             <td><a href="{{ cpUrl('content-subscriptions/subscriptions/edit/' ~ subscription.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
                             <td><a href="{{ cpUrl('content-subscriptions/subscriptions/delete/' ~ subscription.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
                         </tr>

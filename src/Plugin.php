@@ -7,9 +7,11 @@ use craft\events\DefineHtmlEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\helpers\ElementHelper;
+use craft\helpers\UrlHelper;
 use craft\web\twig\variables\Cp;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
+use publishing\contentsubscriptions\models\SettingsModel;
 use publishing\contentsubscriptions\services\GroupsService;
 use publishing\contentsubscriptions\services\NotificationsService;
 use publishing\contentsubscriptions\services\SubscriptionsService;
@@ -23,6 +25,8 @@ use craft\events\ModelEvent;
  * @property GroupsService $groupsService;
  * @property SubscriptionsService $subscriptionsService;
  * @property NotificationsService $notificationsService;
+ * @property-read mixed $settingsResponse
+ * @property-read string $pluginName
  * @property-read null|array $cpNavItem
  */
 class Plugin extends \craft\base\Plugin
@@ -40,6 +44,22 @@ class Plugin extends \craft\base\Plugin
 
         $this->_registerTwigExtensions();
     }
+
+
+
+    public function getPluginName(): string
+    {
+        return $this->getSettings()->pluginName;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSettingsResponse(): mixed
+    {
+        return Craft::$app->controller->redirect(UrlHelper::cpUrl('content-subscriptions/settings'));
+    }
+
 
     protected function setup(): void
     {
@@ -65,6 +85,7 @@ class Plugin extends \craft\base\Plugin
                 $event->rules['content-subscriptions/subscriptions/edit/<id:\d+>'] = 'content-subscriptions/subscriptions/edit-subscription';
                 $event->rules['content-subscriptions/subscriptions/delete/<id:\d+>'] = 'content-subscriptions/subscriptions/delete-subscription';
                 $event->rules['content-subscriptions/subscriptions/sendVerificationMail/<hashValue:\w+>'] = 'content-subscriptions/subscriptions/send-verification-mail';
+                $event->rules['content-subscriptions/settings/general'] = 'content-subscriptions/settings/settings';
             }
         );
 
@@ -128,7 +149,7 @@ class Plugin extends \craft\base\Plugin
     {
         $nav = parent::getCpNavItem();
 
-        $nav['label'] = \Craft::t('content-subscriptions', 'Content Subscriptions');
+        $nav['label'] = \Craft::t('content-subscriptions', $this->getPluginName());
         $nav['url'] = 'content-subscriptions';
 
         $nav['subnav']['groups'] = [
@@ -157,6 +178,14 @@ class Plugin extends \craft\base\Plugin
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function createSettingsModel(): ?Model
+    {
+        return new SettingsModel();
+    }
+
+    /**
      * @return string|null
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -165,8 +194,9 @@ class Plugin extends \craft\base\Plugin
      */
     protected function settingsHtml(): ?string
     {
-        return \Craft::$app->getView()->renderTemplate('content-subscriptions/_settings', [
-            'settings' => $this->getSettings()
-        ]);
+        return \Craft::$app->getView()->renderTemplate(
+            'content-subscriptions/settings',
+            [ 'settings' => $this->getSettings() ]
+        );
     }
 }

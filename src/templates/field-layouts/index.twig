@@ -6,7 +6,7 @@
 {% set selectedSubnavItem = 'field-layouts' %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: craft.contentSubscriptions.getPluginName | t('content-subscriptions'), url: url('content-subscriptions') },
     { label: 'Field Layouts' | t('content-subscriptions'), url: url('content-subscriptions/field-layouts') },
 ] %}
 

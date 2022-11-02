@@ -8,7 +8,7 @@
 {% set groups = craft.contentSubscriptions.getMailGroupLabels %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: craft.contentSubscriptions.getPluginName | t('content-subscriptions'), url: url('content-subscriptions') },
     { label: 'Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions/subscriptions') },
     { label: subscription.email, url: url('content-subscriptions/subscriptions/edit/'  ~ subscription.id) },
 ] %}

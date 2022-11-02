@@ -12,7 +12,7 @@
 {% endif %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: craft.contentSubscriptions.getPluginName | t('content-subscriptions'), url: url('content-subscriptions') },
     { label: 'Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions/subscriptions') },
     { label: 'New' | t('content-subscriptions'), url: url('content-subscriptions/subscriptions/new') },
 ] %}

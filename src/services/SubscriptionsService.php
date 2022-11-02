@@ -173,6 +173,9 @@ class SubscriptionsService extends Component
         $subscriptionModel->hashValue = $record->hashValue;
         $subscriptionModel->enabled = $record->enabled;
 
+        $subscriptionModel->dateCreated = date_create_from_format('Y-m-d H:i:s', $record->dateCreated);
+        $subscriptionModel->dateUpdated = date_create_from_format('Y-m-d H:i:s', $record->dateUpdated);
+
         return $subscriptionModel;
     }
 

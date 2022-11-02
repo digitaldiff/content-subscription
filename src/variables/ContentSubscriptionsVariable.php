@@ -9,6 +9,14 @@ use publishing\contentsubscriptions\Plugin;
 
 class ContentSubscriptionsVariable
 {
+    /**
+     * @return string
+     */
+    public function getPluginName(): string
+    {
+        return Plugin::getInstance()->getSettings()->pluginName;
+    }
+
     public function getMailGroups($id = 0): array
     {
         return Plugin::getInstance()->groupsService->getMailGroups($id);

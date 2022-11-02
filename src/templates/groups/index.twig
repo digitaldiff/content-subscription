@@ -8,8 +8,14 @@
 {% set mailGroups = craft.contentSubscriptions.getMailGroups() %}
 {% set sections = craft.contentSubscriptions.getSections(true) %}
 
+{% set result = craft.query().select('id as groupId, count(*) as count').from('{{%contentsubscriptions_subscription}}').groupBy('groupId').all() %}
+{% set subscriberCount = [] %}
+{% for group in result %}
+    {% set subscriberCount = subscriberCount|merge({('g-' ~ group.groupId): group.count}) %}
+{% endfor %}
+
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: craft.contentSubscriptions.getPluginName, url: url('content-subscriptions') },
     { label: 'Groups' | t('content-subscriptions'), url: url('content-subscriptions/groups') },
 ] %}
 
@@ -26,18 +32,19 @@
 {% endblock %}
 
 {% block content %}
+
     {% if mailGroups|length %}
         <div class="tableview tablepane">
+
+
             <table class="data fullwidth">
                 <thead>
                 <tr>
-                    {# TODO amount of subscribers #}
-                    {# TODO date edited #}
-                    {# TODO date created #}
-                    {# TODO provide unsubscribing-option #}
-                    {#<th scope="col">{{ 'Group ID' |t('content-subscriptions') }}</th>#}
+
                     <th scope="col">{{ 'Group Name' |t('content-subscriptions') }}</th>
                     <th scope="col">{{ 'Section' |t('content-subscriptions') }}</th>
+                    <th scope="col">{{ 'Subscriber count' |t('content-subscriptions') }}</th>
+                    <th scope="col">{{ 'Date created' |t('content-subscriptions') }}</th>
                     <th class="col"></th>
                     <th class="thin"></th>
                     <th class="thin"></th>
@@ -45,22 +52,20 @@
                 </tr>
                 </thead>
                 {% for group in mailGroups %}
+
+
                     <tbody>
                     <tr class="s-{{ group.sectionId }}">
-                       {# <td>{{ group.id }}</td>#}
-                        <td><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
-                        <td>{{ sections[group.sectionId] }}</td>
-                        {# <td>
-                                <a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}">{{ 'Edit'|t('content-subscriptions') }}</a>
-                                {% if currentUser.can('formie-createForms') %}
-                                    <a href="{{ cpUrl('content-subscriptions/groups/delete/' ~ group.id) }}">{{ 'Delete'|t('content-subscriptions') }}</a>
-                                {% endif %}
-                            </td>#}
+                        <td class="name-column"><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
+                        <td class="section-column">{{ sections[group.sectionId] }}</td>
+                        <td class="count-column">{{ subscriberCount['g-'~group.id] }}</td>
+                        <td class="date-created-column">{{ group.dateCreated|date('d.m.Y')  }}</td>
+
                         {# TODO fix text #}
-                        <td><p class="code copytextbtn" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');">{{ '\{\{ craft.contentSubscriptions.getSubscriptionForm(' ~ group.id ~ ') \}\}' }}</p></td>
-                        <td><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm({{ group.id }}) \}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
-                        <td><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
-                        <td><a href="{{ cpUrl('content-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+                        <td class="twig-snipped-column"><p class="code copytextbtn" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm(\{ groupId: {{ group.id }}, returnUrl: craft.app.request.absoluteUrl, btnValue: \'Send\'|t(), btnClass: \'my-btn\', formClass: \'my-form\'  \} )\}\}');">{{ '\{\{ craft.contentSubscriptions.getSubscriptionForm(\{ groupId: ' ~ group.id ~ ', returnUrl: craft.app.request.absoluteUrl, btnValue: \'Send\'|t(), btnClass: \'my-btn\', formClass: \'my-form\'  \}) \}\}' }}</p></td>
+                        <td class="twig-btn-column"><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm(\{ groupId: {{ group.id }}, returnUrl: craft.app.request.absoluteUrl, btnValue: \'Send\'|t(), btnClass: \'my-btn\', formClass: \'my-form\'  \} )\}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
+                        <td class="edit-column"><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>
+                        <td class="delete-column"><a href="{{ cpUrl('content-subscriptions/groups/delete/' ~ group.id) }}" class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
                     </tr>
                     </tbody>
                 {% endfor %}
@@ -71,74 +76,9 @@
             <p>{{ 'No groups exist yet.'|t('content-subscriptions') }}</p>
         </div>
     {% endif %}
-
-
-
-    {#{% set text = 'Enter a message. Available tags: ' ~ availableTags() %}#}
-    {#
-    <div id="settings" class="hidden">
-        <h2>Templates</h2>
-        <form method="post" action="">
-            {{ csrfInput() }}
-
-            {{ forms.hidden({
-                name: 'action',
-                value: 'content-subscriptions/settings/save-mail-group'
-            }) }}
-
-            {{ forms.textAreaField({
-                label: 'Mail Template',
-                name: 'mailTemplate',
-                value: settings.mailTemplate,
-                instructions: 'Enter a message. Available tags: ##NAME##, ##EMAIL##' ,
-                rows: 4,
-                required: true,
-            }) }}
-
-            {{ forms.submitButton({
-                label: 'Submit',
-                name: 'submit',
-            }) }}
-        </form>
-
-        <p>Templates: {{ mailGroups | length}}</p>
-        <h2>Subscriptions</h2>
-        <form method="post" action="">
-            {{ csrfInput() }}
-
-            {{ forms.hidden({
-                name: 'action',
-                value: 'content-subscriptions/settings/save-subscription'
-            }) }}
-
-            {{ forms.textField({
-                label: 'Subscription',
-                name: 'subscription-email',
-                value: settings.mailTemplate,
-                instructions: 'Enter a E-Mail Address' ,
-                required: true,
-            }) }}
-
-            {{ forms.textField({
-                label: 'Section Id',
-                name: 'section-id',
-                value: settings.mailTemplate,
-                instructions: 'Enter a section id' ,
-                required: true,
-            }) }}
-
-            {{ forms.submitButton({
-                label: 'Submit',
-                name: 'submit',
-            }) }}
-        </form>
-        <p>Subs: {{ contentSubscriptions | length}}</p>
-    </div>
-    <script>
-        removeSubscription = function(e) {
-            alert('test');
-
-        }
-    </script>
-    #}
+<style>
+    .twig-snipped-column {
+        max-width: 440px;
+    }
+</style>
 {% endblock %}

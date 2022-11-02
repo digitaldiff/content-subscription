@@ -9,7 +9,7 @@
 {% set sections = craft.contentSubscriptions.getSections(true) %}
 
 {% set crumbs = [
-    { label: 'Content Subscriptions' | t('content-subscriptions'), url: url('content-subscriptions') },
+    { label: craft.contentSubscriptions.getPluginName | t('content-subscriptions'), url: url('content-subscriptions') },
     { label: 'Groups' | t('content-subscriptions'), url: url('content-subscriptions/groups') },
     { label: 'New' | t('content-subscriptions'), url: url('content-subscriptions/groups/new') },
 ] %}

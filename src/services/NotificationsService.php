@@ -54,8 +54,10 @@ class NotificationsService extends Component
             $attributes['hashValue'],
             $attributes['groupId'],
             $attributes['enabled'],
-            $attributes['verificationStatus']
-        );
+            $attributes['verificationStatus'],
+            $attributes['dateCreated'],
+            $attributes['dateUpdated'],
+            );
 
         $body = $group->optInBody;
 
@@ -95,7 +97,9 @@ class NotificationsService extends Component
                 $attributes['hashValue'],
                 $attributes['groupId'],
                 $attributes['enabled'],
-                $attributes['verificationStatus']
+                $attributes['verificationStatus'],
+                $attributes['dateCreated'],
+                $attributes['dateUpdated'],
             );
 
             foreach ($attributes as $key => $attribute) {

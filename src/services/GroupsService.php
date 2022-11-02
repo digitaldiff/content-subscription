@@ -155,6 +155,9 @@ class GroupsService extends Component
         $groupModel->enableUnsubscribing = $record->enableUnsubscribing;
         $groupModel->unsubscribeMessage = $record->unsubscribeMessage;
         $groupModel->enabled = $record->enabled;
+        $groupModel->dateCreated = date_create_from_format('Y-m-d H:i:s', $record->dateCreated);
+        $groupModel->dateUpdated = date_create_from_format('Y-m-d H:i:s', $record->dateUpdated);
+
 
         return $groupModel;
     }

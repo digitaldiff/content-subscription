@@ -1,0 +1,31 @@
+{% extends '_layouts/cp' %}
+
+{% set crumbs = [
+    { label: craft.contentSubscriptions.getPluginName, url: url('content-subscriptions') },
+    { label: "Settings"|t('content-subscriptions'), url: url('content-subscriptions/settings') },
+] %}
+
+{% set selectedSubnavItem = 'settings' %}
+
+{% set navItems = {
+    'Settings-heading': { heading: "Settings"|t('content-subscriptions') },
+    'general': { title: "General"|t('content-subscriptions') },
+} %}
+
+{% block sidebar %}
+    <nav>
+        <ul>
+            {% for key, element in navItems %}
+                {% if element.heading is defined %}
+                    <li class="heading">
+                        <span>{{ element.heading }}</span>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ url('content-subscriptions/settings/'~ key) }}" class="sel">{{ element.title }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}

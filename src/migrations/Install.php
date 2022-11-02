@@ -76,14 +76,14 @@ class Install extends Migration
 
     protected function addForeignKeys(): void
     {
-        $this->addForeignKey(
+/*        $this->addForeignKey(
             $this->db->getForeignKeyName(),
             ContentSubscriptions_SubscriptionRecord::tableName(),
             'id',
             '{{%elements}}',
             'id',
             'CASCADE'
-        );
+        );*/
     }
 
     protected function removeTables()
