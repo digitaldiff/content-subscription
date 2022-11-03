@@ -5,14 +5,14 @@ use craft\base\Model;
 
 class SubscriptionModel extends Model
 {
-    public int $id;
-    public int $groupId;
-    public string $firstName;
-    public string $lastName;
-    public string $email;
+    public int $id = 0;
+    public int $groupId = 0;
+    public string $firstName = '';
+    public string $lastName = '';
+    public string $email = '';
     public bool $verificationStatus = false;
-    public string $hashValue;
-    public bool $enabled;
+    public string $hashValue = '';
+    public bool $enabled = true;
     public \DateTime $dateCreated;
     public \DateTime $dateUpdated;
     public string $uid;

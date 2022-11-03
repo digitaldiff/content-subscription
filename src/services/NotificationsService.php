@@ -147,7 +147,7 @@ class NotificationsService extends Component
             ->setFrom(App::env('EMAIL_SYSTEM'))
             ->setTo($to)
             ->setSubject($subject)
-            ->setHtmlBody( $body);
+            ->setTextBody($body);
 
         return $message->send();
     }

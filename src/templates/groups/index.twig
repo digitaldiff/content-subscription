@@ -57,11 +57,9 @@
                     <tbody>
                     <tr class="s-{{ group.sectionId }}">
                         <td class="name-column"><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
-                        <td class="section-column">{{ sections[group.sectionId] }}</td>
-                        <td class="count-column">{{ subscriberCount['g-'~group.id] }}</td>
+                        <td class="section-column">{{ sections[group.sectionId] ?? '-' }}</td>
+                        <td class="count-column">{{ subscriberCount['g-'~group.id] ?? '0'  }}</td>
                         <td class="date-created-column">{{ group.dateCreated|date('d.m.Y')  }}</td>
-
-                        {# TODO fix text #}
                         <td class="twig-snipped-column"><p class="code copytextbtn" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm(\{ groupId: {{ group.id }}, returnUrl: craft.app.request.absoluteUrl, btnValue: \'Send\'|t(), btnClass: \'my-btn\', formClass: \'my-form\'  \} )\}\}');">{{ '\{\{ craft.contentSubscriptions.getSubscriptionForm(\{ groupId: ' ~ group.id ~ ', returnUrl: craft.app.request.absoluteUrl, btnValue: \'Send\'|t(), btnClass: \'my-btn\', formClass: \'my-form\'  \}) \}\}' }}</p></td>
                         <td class="twig-btn-column"><a href="javascript:void(0)" data-icon="clipboard" onclick="navigator.clipboard.writeText('\{\{ craft.contentSubscriptions.getSubscriptionForm(\{ groupId: {{ group.id }}, returnUrl: craft.app.request.absoluteUrl, btnValue: \'Send\'|t(), btnClass: \'my-btn\', formClass: \'my-form\'  \} )\}\}');" title="{{ 'Copy twig snipped'|t('app') }}" role="button"></a></td>
                         <td class="edit-column"><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}" class="edit icon" title="{{ 'Edit'|t('app') }}" role="button"></a></td>

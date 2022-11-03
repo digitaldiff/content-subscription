@@ -17,7 +17,7 @@ class GroupsController extends Controller
 
     public function actionCreateMailGroup(): Response
     {
-        return $this->renderTemplate('content-subscriptions/groups/_new');
+        return $this->renderTemplate('content-subscriptions/groups/_new', ['group' => new MailGroupModel()]);
     }
 
     public function actionEditMailGroup(int $id): Response

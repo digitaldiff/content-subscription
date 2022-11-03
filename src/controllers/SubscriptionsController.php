@@ -29,7 +29,6 @@ class SubscriptionsController extends Controller
         $message = \Craft::t('content-subscriptions', 'Link not valid.');
 
         if (Plugin::getInstance()->subscriptionsService->validateSubscription($hashValue)) {
-            //return $this->renderTemplate('content-subscriptions/subscriptions/_new');
             $message = \Craft::t('content-subscriptions', 'E-Mail successfully verified.');
         }
 
@@ -65,7 +64,7 @@ class SubscriptionsController extends Controller
     //
     public function actionCreateSubscription()
     {
-        return $this->renderTemplate('content-subscriptions/subscriptions/_new');
+        return $this->renderTemplate('content-subscriptions/subscriptions/_new', ['subscription' => new SubscriptionModel()]);
     }
 
     public function actionEditSubscription(int $id)
@@ -103,6 +102,14 @@ class SubscriptionsController extends Controller
     public function actionSubscribeToGroup()
     {
         $request = \Craft::$app->getRequest();
+        $returnUrl = $request->getRequiredParam('returnUrl') !== '' ? $request->getRequiredParam('returnUrl') :$request->getFullPath();
+
+        // Honeypot
+        if ($request->getParam('pot-email') !== '') {
+            return $this->redirect($returnUrl);
+        }
+
+        // TODO check for spam via cookie / timestamp
 
         $subscriptionModel = new SubscriptionModel;
 
@@ -111,18 +118,21 @@ class SubscriptionsController extends Controller
         $subscriptionModel->lastName = $request->getRequiredParam('lastName');
         $subscriptionModel->email = $request->getRequiredParam('email');
 
-        $returnUrl = $request->getRequiredParam('returnUrl') !== '' ? $request->getRequiredParam('returnUrl') :$request->getFullPath();
-
         $subscriptionModel->verificationStatus = false;
         $subscriptionModel->enabled = true;
 
         $subscriptionModel->generateHash();
 
         $subscriptionService = Plugin::getInstance()->subscriptionsService;
-        $hashValue = $subscriptionService->saveSubscription($subscriptionModel);
+        $isDuplicate = $subscriptionService->checkForDuplicates($subscriptionModel->groupId, $subscriptionModel->email);
 
-        if ($hashValue) {
-            Plugin::getInstance()->notificationsService->initiateVerification($hashValue);
+        if (!$isDuplicate)
+        {
+            $hashValue = $subscriptionService->saveSubscription($subscriptionModel);
+
+            if ($hashValue) {
+                Plugin::getInstance()->notificationsService->initiateVerification($hashValue);
+            }
         }
 
         return $this->redirect($returnUrl. '?s=1');
@@ -148,6 +158,14 @@ class SubscriptionsController extends Controller
         $subscriptionModel->lastName = $request->getRequiredParam('lastName');
         $subscriptionModel->email = $request->getRequiredParam('email');
         $subscriptionModel->enabled = $request->getRequiredParam('enabled');
+
+        $isDuplicate = (Plugin::getInstance()->subscriptionsService)->checkForDuplicates($subscriptionModel->groupId, $subscriptionModel->email);
+        if ($isDuplicate) {
+
+            \Craft::$app->getSession()->setError(\Craft::t('content-subscriptions','Duplicate entry found - no entry created'));
+            return $this->renderTemplate('content-subscriptions/subscriptions/_new', [ 'subscription' => $subscriptionModel]);
+        }
+
         (Plugin::getInstance()->subscriptionsService)->saveSubscription($subscriptionModel);
 
         return $this->redirect('content-subscriptions/subscriptions');

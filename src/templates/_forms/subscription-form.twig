@@ -3,17 +3,40 @@
 {% if craft.app.request.getParam('s') %}
     <p>{{ 'Registration successful. You will receive a confirmation email from us shortly.'|t}}</p>
 {% else %}
-<form class="{{ formClass }}">
-    <input type="hidden" name="action" value="content-subscriptions/subscriptions/subscribe-to-group">
-    <input type="hidden" name="groupId" value="{{ id }}">
-    <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
-    {% for field, type in fieldTypes %}
-        {% if (type == 'string') %}
-            <label for="#{{ field }}">{{ field|t() }}</label>
-            <input id="#{{ field }}" name="{{ field }}" {{ (field == 'email') ? 'type=' ~ field : '' }} required />
-        {% endif %}
-    {% endfor %}
-    <button type="submit" class="btn btn-primary {{ btnClass }}">{{ btnValue }}</button>
-</form>
+    <form class="subscription-form {{ formClass }}">
+        <input type="hidden" name="action" value="content-subscriptions/subscriptions/subscribe-to-group">
+        <input type="hidden" name="groupId" value="{{ id }}">
+        <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
+        <label class="pot-email" for="pot-email">Pot E-Mail</label>
+        <input class="pot-email" name="pot-email" id="pot-email" tabindex="-1">
+        {% for field, type in fieldTypes %}
+            {% if (type == 'string') %}
+                <label for="{{ field }}">{{ field|t() }}</label>
+                <input id="{{ field }}" name="{{ field }}" {{ (field == 'email') ? 'type=' ~ field : '' }} required />
+            {% endif %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary {{ btnClass }}">{{ btnValue }}</button>
+    </form>
+    <style>
+        .pot-email {
+            opacity: 0;
+            position: absolute;
+        }
+        .subscription-form {
+            display: flex;
+            max-width: 320px;
+            flex-direction: column;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
+        .subscription-form > input {
+            margin-bottom: 10px;
+        }
+
+        .subscription-form button {
+            width: min-content;
+            padding: 0 25px;
+        }
+    </style>
 {% endif %}

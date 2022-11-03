@@ -1,0 +1,30 @@
+{% extends '_layouts/cp' %}
+
+{% set selectedSubnavItem = 'groups' %}
+{% set fullPageForm = true %}
+{% set sections = craft.contentSubscriptions.getSections(true) %}
+
+{% set tabs = {
+    general: {
+        label: 'General'|t('mail-subscribtions'),
+        url: '#general',
+    },
+    mail: {
+        label: 'Mail'|t('mail-subscribtions'),
+        url: '#mail',
+    },
+    optIn: {
+        label: 'Opt-In'|t('mail-subscribtions'),
+        url: '#opt-in',
+    },
+    unsubscribe: {
+        label: 'Unsubscribe'|t('mail-subscribtions'),
+        url: '#unsubscribe',
+    },
+} %}
+
+{% set navItems = {
+    'general-heading': { heading: "General"|t('content-subscriptions') },
+    'settings': { title: "Settings"|t('content-subscriptions') },
+} %}
+

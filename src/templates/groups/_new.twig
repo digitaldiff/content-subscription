@@ -1,43 +1,14 @@
-{% extends '_layouts/cp' %}
+{% extends 'content-subscriptions/groups/_layouts/detail' %}
 
 {% import '_includes/forms' as forms %}
 
 {% set title = 'New Mail Group' %}
-{% set selectedSubnavItem = 'groups' %}
-{% set fullPageForm = true %}
-
-{% set sections = craft.contentSubscriptions.getSections(true) %}
 
 {% set crumbs = [
     { label: craft.contentSubscriptions.getPluginName | t('content-subscriptions'), url: url('content-subscriptions') },
     { label: 'Groups' | t('content-subscriptions'), url: url('content-subscriptions/groups') },
     { label: 'New' | t('content-subscriptions'), url: url('content-subscriptions/groups/new') },
 ] %}
-
-{% set tabs = {
-    general: {
-        label: 'General'|t('mail-subscribtions'),
-        url: '#general',
-    },
-    mail: {
-        label: 'Mail'|t('mail-subscribtions'),
-        url: '#mail',
-    },
-    optIn: {
-        label: 'Opt-In'|t('mail-subscribtions'),
-        url: '#opt-in',
-    },
-    unsubscribe: {
-        label: 'Unsubscribe'|t('mail-subscribtions'),
-        url: '#unsubscribe',
-    },
-} %}
-
-{% set navItems = {
-    'general-heading': { heading: "General"|t('content-subscriptions') },
-    'general': { title: "General"|t('content-subscriptions') },
-
-} %}
 
 {% block sidebar %}
     <nav>
@@ -64,10 +35,10 @@
         name: 'action',
         value: 'content-subscriptions/groups/save-mail-group'
     }) }}
-    {% include 'content-subscriptions/groups/_includes/general' with { group: ''} %}
-    {% include 'content-subscriptions/groups/_includes/mail' with { group: ''} %}
-    {% include 'content-subscriptions/groups/_includes/opt-in' with { group: ''} %}
-    {% include 'content-subscriptions/groups/_includes/unsubscribe' with { group: ''} %}
+    {% include 'content-subscriptions/groups/_includes/general' %}
+    {% include 'content-subscriptions/groups/_includes/mail' %}
+    {% include 'content-subscriptions/groups/_includes/opt-in' %}
+    {% include 'content-subscriptions/groups/_includes/unsubscribe' %}
 
 
 {% endblock %}

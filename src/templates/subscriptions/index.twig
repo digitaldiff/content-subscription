@@ -49,7 +49,7 @@
                 <tbody>
                     {% for subscription in subscriptions %}
                         <tr class="g-{{ subscription.groupId }}">
-                            <td>{{ groups[subscription.groupId].groupName }}</td>
+                            <td>{{ groups[subscription.groupId].groupName ?? '-' }}</td>
                             <td>{{ subscription.firstName }}</td>
                             <td>{{ subscription.lastName }}</td>
                             <td>{{ subscription.email }}</td>

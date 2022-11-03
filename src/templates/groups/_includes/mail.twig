@@ -5,7 +5,7 @@
         label: 'Mail subject'|t('content-subscriptions'),
         name: 'emailSubject',
         required: true,
-        value: (group) ? group.emailSubject : ''
+        value: group.emailSubject,
     }) }}
 
     {{ forms.textAreaField({
@@ -13,7 +13,7 @@
         name: 'emailMessage',
         instructions: setInstructions(['firstName', 'lastName','email', 'unsubscribeLink']),
         required: true,
-        value: (group) ? group.emailBody : '',
+        value: group.emailBody,
         rows: 8
     }) }}
 </div>

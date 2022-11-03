@@ -1,42 +1,14 @@
-{% extends '_layouts/cp' %}
+{% extends 'content-subscriptions/groups/_layouts/detail' %}
 
 {% import '_includes/forms' as forms %}
 
 {% set title = 'Edit Mail Group' %}
-{% set selectedSubnavItem = 'groups' %}
-{% set fullPageForm = true %}
 
 {% set crumbs = [
     { label: craft.contentSubscriptions.getPluginName | t('content-subscriptions'), url: url('content-subscriptions') },
     { label: 'Groups' | t('content-subscriptions'), url: url('content-subscriptions/groups') },
     { label: group.groupName, url: url('content-subscriptions/groups/edit/'  ~ group.id) },
 ] %}
-
-{% set sections = craft.contentSubscriptions.getSections(true) %}
-
-{% set tabs = {
-    general: {
-        label: 'General'|t('mail-subscribtions'),
-        url: '#general',
-    },
-    mail: {
-        label: 'Mail'|t('mail-subscribtions'),
-        url: '#mail',
-    },
-    optIn: {
-        label: 'Opt-In'|t('mail-subscribtions'),
-        url: '#opt-in',
-    },
-    unsubscribe: {
-        label: 'Unsubscribe'|t('mail-subscribtions'),
-        url: '#unsubscribe',
-    },
-} %}
-
-{% set navItems = {
-    'general-heading': { heading: "General"|t('content-subscriptions') },
-    'settings': { title: "Settings"|t('content-subscriptions') },
-} %}
 
 {% block sidebar %}
     <nav>
@@ -48,7 +20,7 @@
                     </li>
                 {% else %}
                     <li>
-                        <a href="{{ url('content-subscriptions/groups/edit/' ~ group.id) }}" class="sel">{{ element.title }}</a>
+                        <a href="{{ url('content-subscriptions/groups/' ~ (group.id) ?  'edit/' ~ group.id : 'new' ) }}" class="sel">{{ element.title }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
@@ -57,9 +29,6 @@
 {% endblock %}
 
 {% block content %}
-
-
-
     {{ forms.hidden({
         name: 'action',
         value: 'content-subscriptions/groups/update-mail-group'
@@ -74,7 +43,6 @@
     {% include 'content-subscriptions/groups/_includes/mail' %}
     {% include 'content-subscriptions/groups/_includes/opt-in' %}
     {% include 'content-subscriptions/groups/_includes/unsubscribe' %}
-
 {% endblock %}
 
 {% block details %}
