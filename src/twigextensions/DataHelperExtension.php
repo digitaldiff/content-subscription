@@ -29,6 +29,18 @@ class DataHelperExtension extends AbstractExtension
     {
         return (new SubscriptionModel())->getSubscriptionForm();
     }*/
+    public function setInstructions(array $tags):string
+    {
+        $text = Craft::t('content-subscriptions', 'Available tags:');
+        $hoverText = Craft::t('content-subscriptions', 'Copy to clipboard');
+
+        foreach ($tags as $tag) {
+            $text.= ' <span title="'.$hoverText.'" class="code copytextbtn" onclick="navigator.clipboard.writeText(\'##'. $tag .'##\')">##'. $tag .'##</span>';
+        }
+
+        return $text;
+
+    }
 
     /**
      * @return TwigFunction[]
@@ -36,7 +48,7 @@ class DataHelperExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('availableTags', [$this, 'availableTags']),
+            new TwigFunction('setInstructions', [$this, 'setInstructions']),
         ];
     }
 }

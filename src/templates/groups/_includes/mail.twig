@@ -11,6 +11,7 @@
     {{ forms.textAreaField({
         label: 'Mail Message'|t('content-subscriptions'),
         name: 'emailMessage',
+        instructions: setInstructions(['firstName', 'lastName','email', 'unsubscribeLink']),
         required: true,
         value: (group) ? group.emailBody : '',
         rows: 8

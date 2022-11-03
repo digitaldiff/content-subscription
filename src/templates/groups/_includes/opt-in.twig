@@ -11,6 +11,7 @@
     {{ forms.textAreaField({
         label: 'Opt-In confirmation mail message'|t('content-subscriptions'),
         name: 'optInBody',
+        instructions: setInstructions(['firstName', 'lastName','email', 'verificationLink']),
         required: true,
         value: (group) ? group.optInBody : '',
         rows: 8
