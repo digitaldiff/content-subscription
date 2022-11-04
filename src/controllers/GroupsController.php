@@ -22,13 +22,12 @@ class GroupsController extends Controller
 
     public function actionEditMailGroup(int $id): Response
     {
-        if ($id > 0)
-        {
+        if ($id > 0) {
             $group = Plugin::getInstance()->groupsService->getMailGroup($id);
-
-            if ($group) {
-                return $this->renderTemplate('content-subscriptions/groups/_edit', ['group' => $group]);
-            }
+        }
+        
+        if ($group) {
+            return $this->renderTemplate('content-subscriptions/groups/_edit', ['group' => $group]);
         }
 
         return $this->asFailure('content-subscriptions/groups');
@@ -40,9 +39,7 @@ class GroupsController extends Controller
 
     public function actionSaveMailGroup()
     {
-        $this->requireAcceptsJson();
         $request = \Craft::$app->getRequest();
-
 
         $subscriptionsService = Plugin::getInstance()->groupsService;
 
@@ -50,20 +47,9 @@ class GroupsController extends Controller
 
         $this->mapRequestToModel($request, $groupModel);
 
-
-        /*if (!$groupModel->validate()) {
-            if ($request->getAcceptsJson()) {
-                return $this->asJson([
-                    'success' => false,
-                    'errors' => $groupModel->getErrors(),
-                ]);
-            }
-            \Craft::$app->getUrlManager()->setRouteParams([
-                'groupModellll' => $groupModel
-            ]);
-
-            return null;
-        }*/
+        if (!$groupModel->validate()) {
+            return $this->renderTemplate('content-subscriptions/groups/_new', ['group' => $groupModel]);
+        }
 
         $subscriptionsService->saveMailGroup($groupModel);
 
@@ -79,6 +65,10 @@ class GroupsController extends Controller
         $groupModel = new MailGroupModel;
         $groupModel->id = $request->getRequiredParam('id');
         $this->mapRequestToModel($request, $groupModel);
+
+        if (!$groupModel->validate()) {
+            return $this->renderTemplate('content-subscriptions/groups/_edit', ['group' => $groupModel]);
+        }
 
         $subscriptionsService->updateMailGroup($groupModel);
 

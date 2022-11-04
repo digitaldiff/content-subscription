@@ -5,6 +5,7 @@
         label: 'Unsubscribe message'|t('content-subscriptions'),
         name: 'unsubscribeMessage',
         required: true,
-        value: (group) ? group.unsubscribeMessage : ''
+        value: group.unsubscribeMessage,
+        errors: group.getErrors('unsubscribeMessage'),
     }) }}
 </div>

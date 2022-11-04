@@ -54,4 +54,13 @@ class SubscriptionModel extends Model
             'firstName', 'lastName', 'email'
         ];
     }
+
+    public function defineRules(): array
+    {
+        $rules = parent::defineRules();
+        $rules[] = [['firstName', 'lastName', 'email'], 'required' ];
+        $rules[] = [['email' ], 'email'];
+
+        return $rules;
+    }
 }

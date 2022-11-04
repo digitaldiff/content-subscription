@@ -159,9 +159,12 @@ class SubscriptionsController extends Controller
         $subscriptionModel->email = $request->getRequiredParam('email');
         $subscriptionModel->enabled = $request->getRequiredParam('enabled');
 
+        if (!$subscriptionModel->validate()) {
+            return $this->renderTemplate('content-subscriptions/subscriptions/_new', ['subscription' => $subscriptionModel]);
+        }
+
         $isDuplicate = (Plugin::getInstance()->subscriptionsService)->checkForDuplicates($subscriptionModel->groupId, $subscriptionModel->email);
         if ($isDuplicate) {
-
             \Craft::$app->getSession()->setError(\Craft::t('content-subscriptions','Duplicate entry found - no entry created'));
             return $this->renderTemplate('content-subscriptions/subscriptions/_new', [ 'subscription' => $subscriptionModel]);
         }
@@ -183,6 +186,10 @@ class SubscriptionsController extends Controller
         $subscriptionModel->email = $request->getRequiredParam('email');
         $subscriptionModel->enabled = $request->getRequiredParam('enabled');
         $subscriptionModel->verificationStatus = $request->getRequiredParam('verificationStatus');
+
+        if (!$subscriptionModel->validate()) {
+            return $this->renderTemplate('content-subscriptions/subscriptions/_edit', ['subscription' => $subscriptionModel]);
+        }
 
         Plugin::getInstance()->subscriptionsService->updateSubscription($subscriptionModel);
 

@@ -11,7 +11,7 @@
         <input class="pot-email" name="pot-email" id="pot-email" tabindex="-1">
         {% for field, type in fieldTypes %}
             {% if (type == 'string') %}
-                <label for="{{ field }}">{{ field|t() }}</label>
+                <label for="{{ field }}" class="required">{{ field|t() }}</label>
                 <input id="{{ field }}" name="{{ field }}" {{ (field == 'email') ? 'type=' ~ field : '' }} required />
             {% endif %}
         {% endfor %}
@@ -30,13 +30,21 @@
             margin-right: auto;
         }
 
+        .subscription-form > label.required::after {
+            content: "*";
+            color: red;
+        }
+
         .subscription-form > input {
             margin-bottom: 10px;
         }
+
 
         .subscription-form button {
             width: min-content;
             padding: 0 25px;
         }
+
+
     </style>
 {% endif %}

@@ -4,7 +4,8 @@
     {{ forms.selectField({
         label: 'Section'|t('content-subscriptions'),
         name: 'section',
-        value: (group) ? group.sectionId : '',
+        value: group.sectionId,
+        errors: group.getErrors('section'),
         options: sections,
         required: true,
         first: true,
@@ -13,7 +14,8 @@
     {{ forms.textField({
         label: 'Group name'|t('content-subscriptions'),
         name: 'groupName',
+        errors: group.getErrors('groupName'),
         required: true,
-        value: (group) ? group.groupName : ''
+        value: group.groupName
     }) }}
 </div>

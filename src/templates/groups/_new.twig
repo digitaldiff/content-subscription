@@ -30,17 +30,15 @@
 
 
 {% block content %}
-
     {{ forms.hidden({
         name: 'action',
         value: 'content-subscriptions/groups/save-mail-group'
     }) }}
+
     {% include 'content-subscriptions/groups/_includes/general' %}
     {% include 'content-subscriptions/groups/_includes/mail' %}
     {% include 'content-subscriptions/groups/_includes/opt-in' %}
     {% include 'content-subscriptions/groups/_includes/unsubscribe' %}
-
-
 {% endblock %}
 
 {% block details %}

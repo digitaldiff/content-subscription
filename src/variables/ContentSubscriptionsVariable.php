@@ -73,7 +73,7 @@ class ContentSubscriptionsVariable
         $fields['formClass'] = $param['formClass'] ?? '';
 
         if ($view->doesTemplateExist($templatePath, View::TEMPLATE_MODE_CP)) {
-            $html = $view->renderTemplate($templatePath, $fields, View::TEMPLATE_MODE_CP);
+                $html = $view->renderTemplate($templatePath, $fields, View::TEMPLATE_MODE_CP);
             return TemplateHelper::raw($html);
         }
         return '';

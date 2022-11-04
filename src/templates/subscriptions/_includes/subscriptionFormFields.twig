@@ -3,9 +3,10 @@
     {{ forms.selectField({
         label: 'Group'|t('content-subscriptions'),
         name: 'groupId',
-        value: (subscription) ? subscription.groupId : '',
+        value: subscription.groupId,
         options: groups,
         required: true,
+        errors: subscription.getErrors('groupId'),
         first: true
     }) }}
 
@@ -13,19 +14,24 @@
         label: 'Firstname'|t('content-subscriptions'),
         name: 'firstName',
         required: true,
-        value: (subscription) ? subscription.firstName : ''
+        errors: subscription.getErrors('firstName'),
+        value: subscription.firstName
     }) }}
 
     {{ forms.textField({
         label: 'Lastname'|t('content-subscriptions'),
         name: 'lastName',
         required: true,
-        value: (subscription) ? subscription.lastName : ''
+        errors: subscription.getErrors('lastName'),
+
+        value: subscription.lastName
     }) }}
 
     {{ forms.textField({
         label: 'Email'|t('content-subscriptions'),
         name: 'email',
         required: true,
-        value: (subscription) ? subscription.email : ''
+        errors: subscription.getErrors('email'),
+
+        value: subscription.email
     }) }}

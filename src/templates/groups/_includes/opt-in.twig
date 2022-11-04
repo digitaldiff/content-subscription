@@ -5,7 +5,8 @@
         label: 'Opt-In confirmation mail subject'|t('content-subscriptions'),
         name: 'optInSubject',
         required: true,
-        value: (group) ? group.optInSubject : ''
+        errors: group.getErrors('optInSubject'),
+        value: group.optInSubject
     }) }}
 
     {{ forms.textAreaField({
@@ -13,7 +14,8 @@
         name: 'optInBody',
         instructions: setInstructions(['firstName', 'lastName','email', 'verificationLink']),
         required: true,
-        value: (group) ? group.optInBody : '',
+        value: group.optInBody,
+        errors: group.getErrors('optInBody'),
         rows: 8
     }) }}
 </div>
