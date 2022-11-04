@@ -40,13 +40,30 @@ class GroupsController extends Controller
 
     public function actionSaveMailGroup()
     {
+        $this->requireAcceptsJson();
         $request = \Craft::$app->getRequest();
+
 
         $subscriptionsService = Plugin::getInstance()->groupsService;
 
         $groupModel = new MailGroupModel;
 
         $this->mapRequestToModel($request, $groupModel);
+
+
+        /*if (!$groupModel->validate()) {
+            if ($request->getAcceptsJson()) {
+                return $this->asJson([
+                    'success' => false,
+                    'errors' => $groupModel->getErrors(),
+                ]);
+            }
+            \Craft::$app->getUrlManager()->setRouteParams([
+                'groupModellll' => $groupModel
+            ]);
+
+            return null;
+        }*/
 
         $subscriptionsService->saveMailGroup($groupModel);
 

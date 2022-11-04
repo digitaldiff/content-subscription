@@ -5,23 +5,27 @@
         name: 'groupId',
         value: (subscription) ? subscription.groupId : '',
         options: groups,
+        required: true,
         first: true
     }) }}
 
     {{ forms.textField({
         label: 'Firstname'|t('content-subscriptions'),
         name: 'firstName',
+        required: true,
         value: (subscription) ? subscription.firstName : ''
     }) }}
 
     {{ forms.textField({
         label: 'Lastname'|t('content-subscriptions'),
         name: 'lastName',
+        required: true,
         value: (subscription) ? subscription.lastName : ''
     }) }}
 
     {{ forms.textField({
         label: 'Email'|t('content-subscriptions'),
         name: 'email',
+        required: true,
         value: (subscription) ? subscription.email : ''
     }) }}

@@ -60,7 +60,6 @@ class Plugin extends \craft\base\Plugin
         return Craft::$app->controller->redirect(UrlHelper::cpUrl('content-subscriptions/settings'));
     }
 
-
     protected function setup(): void
     {
         // Register Services
