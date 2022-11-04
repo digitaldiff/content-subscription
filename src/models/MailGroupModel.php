@@ -24,7 +24,7 @@ class MailGroupModel extends Model
     {
         parent::__construct($config);
         $this->emailSubject =  \Craft::t('content-subscriptions','New content has been released!');
-        $this->emailBody =  \Craft::t('content-subscriptions','Hello ##firstName##'. PHP_EOL . PHP_EOL .'We just released new content, come check it out.' . PHP_EOL . '##entryLink##' . PHP_EOL . PHP_EOL . 'If you no longer wish to receive notifications about this type of content, use following link to unsubscribe:' . PHP_EOL . '##unsubscribeLink##');
+        $this->emailBody =  \Craft::t('content-subscriptions','Hello ##firstName##'. PHP_EOL . PHP_EOL .'We just released new content, come check it out.' . PHP_EOL ./* '##entryLink##' . PHP_EOL .*/ PHP_EOL . 'If you no longer wish to receive notifications about this type of content, use following link to unsubscribe:' . PHP_EOL . '##unsubscribeLink##');
 
         $this->optInSubject = \Craft::t('content-subscriptions','E-Mail verification');
         $this->optInBody = \Craft::t('content-subscriptions','Hello ##firstName##'. PHP_EOL . PHP_EOL .'Use following link to activate your subscription.'. PHP_EOL .'##verificationLink##'. PHP_EOL . PHP_EOL .'If you no longer wish to subscribe, you can just ignore this message.');
