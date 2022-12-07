@@ -9,6 +9,7 @@ Create section-based groups with individual mail templates.
 - Allow page visitors to subscribe to content updates.
 - Custom mail templates per group.
 - Double opt-in via verification mail.
+- Option to manually resend verification mail.
 - Users can easily unsubscribe if they no longer wish to receive your updates. 
 
 ## Requirements
