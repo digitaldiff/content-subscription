@@ -1,8 +1,9 @@
 {
-  "name": "3wpb/craft-content-subscriptions",
+  "name": "3w-publishing/craft-content-subscriptions",
   "description": "Send automatic email notifications whenever you publish new content.",
   "minimum-stability": "stable",
   "license": "proprietary",
+  "version": "1.0.0",
   "authors": [
     {
       "name": "3W-Publishing",
@@ -10,13 +11,13 @@
     }
   ],
   "support": {
-    "email": "p.blaser@3w-group.com"
+    "email": "support@3w-group.ch"
   },
   "require": {
-    "craftcms/cms": "^4.2.5.2"
+    "craftcms/cms": "^4.0.0"
   },
   "type": "craft-plugin",
-  "keywords": ["craft", "mail", "subscription"],
+  "keywords": ["craft", "mail", "subscription", "content"],
   "autoload": {
     "psr-4": {
       "publishing\\contentsubscriptions\\": "src/"
