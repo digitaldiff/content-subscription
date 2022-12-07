@@ -8,7 +8,7 @@
 {% set mailGroups = craft.contentSubscriptions.getMailGroups() %}
 {% set sections = craft.contentSubscriptions.getSections(true) %}
 
-{% set result = craft.query().select('id as groupId, count(*) as count').from('{{%contentsubscriptions_subscription}}').groupBy('groupId').all() %}
+{% set result = craft.query().select('groupId, count(*) as count').from('{{%contentsubscriptions_subscription}}').groupBy('groupId').all() %}
 {% set subscriberCount = [] %}
 {% for group in result %}
     {% set subscriberCount = subscriberCount|merge({('g-' ~ group.groupId): group.count}) %}
@@ -52,8 +52,6 @@
                 </tr>
                 </thead>
                 {% for group in mailGroups %}
-
-
                     <tbody>
                     <tr class="s-{{ group.sectionId }}">
                         <td class="name-column"><a href="{{ cpUrl('content-subscriptions/groups/edit/' ~ group.id) }}">{{ group.groupName }}</a></td>
