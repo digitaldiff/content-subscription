@@ -65,7 +65,7 @@ class NotificationsService extends Component
             $body = str_replace('##' . $key . '##', $subscription->$key, $body);
         }
 
-        $url = UrlHelper::actionUrl('content-subscriptions/subscriptions/validate/?hashValue=' . $subscription->hashValue);
+        $url = UrlHelper::siteUrl('content-subscriptions/subscriptions/validate/' . $subscription->hashValue);
 
         $body = str_replace('##verificationLink##', $url, $body);
 

@@ -88,6 +88,14 @@ class Plugin extends \craft\base\Plugin
             }
         );
 
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+            static function(RegisterUrlRulesEvent $event) {
+                $event->rules['content-subscriptions/subscriptions/validate/<hashValue:\w+>'] = 'content-subscriptions/subscriptions/validate';
+            }
+        );
+
         /**
          * Entry-Save event as notification trigger.
          */
