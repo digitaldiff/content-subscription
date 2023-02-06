@@ -1,3 +1,8 @@
+## 1.0.2 - 2023-02-06
+
+### Fixed
+- Fixed a critical bug on registration and validation requests (403).
+
 ## 1.0.1 - 2022-12-08
 
 ### Fixed
