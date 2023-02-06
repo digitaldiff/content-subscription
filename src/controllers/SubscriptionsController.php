@@ -15,6 +15,8 @@ use yii\web\HttpException;
 
 class SubscriptionsController extends Controller
 {
+    public array|bool|int $allowAnonymous = true;
+
     /**
      * @param string $hashValue
      * @return string|\Twig\Markup
