@@ -1,4 +1,4 @@
-# 3W Content Subscriptions
+# Content Subscriptions
 
 Content Subscriptions is a plugin that allows your visitors to subscribe to your content.
 

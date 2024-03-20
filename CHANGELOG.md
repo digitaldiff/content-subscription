@@ -1,3 +1,8 @@
+## 1.0.3 - 2024-03-20
+
+### Changed
+- Moved plugin to new github organization
+
 ## 1.0.2 - 2023-02-06
 
 ### Fixed

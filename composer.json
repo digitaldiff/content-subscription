@@ -1,16 +1,16 @@
 {
-  "name": "3w-publishing/craft-content-subscriptions",
+  "name": "digitaldiff/craft-content-subscriptions",
   "description": "Send automatic email notifications whenever you publish new content.",
   "type": "craft-plugin",
   "license": "proprietary",
   "authors": [
     {
-      "name": "3W-Publishing",
-      "homepage": "https://www.3w-group.ch/"
+      "name": "diff. Kommunikation AG",
+      "homepage": "https://www.diff.ch/"
     }
   ],
   "support": {
-    "email": "support@3w-group.ch"
+    "email": "support@diff.ch"
   },
   "require": {
     "craftcms/cms": "^4.0.0"
